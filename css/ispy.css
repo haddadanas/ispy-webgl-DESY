@@ -240,7 +240,7 @@ canvas.hover {
 }
 
 #display {
-  height: 75vh;
+  height: 100vh;
   overflow: hidden;
   padding: 0;
 }
@@ -256,7 +256,7 @@ canvas.hover {
 }
 
 #tableview {
-  height: 25vh;
+  height: 1px;
   overflow: auto;
 }
 
