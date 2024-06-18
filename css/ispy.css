@@ -95,7 +95,7 @@ canvas.hover {
   color: black;
   background-color: white;
 }
-
+/* The control panel */
 #treegui {
     position: absolute;
     top: 0;
@@ -240,7 +240,7 @@ canvas.hover {
 }
 
 #display {
-  height: 100vh;
+  height: 95vh;
   overflow: hidden;
   padding: 0;
 }
@@ -256,18 +256,21 @@ canvas.hover {
 }
 
 #tableview {
-  height: 1px;
-  overflow: auto;
+  height: 0vh;
+  overflow: hidden;
+  display: none;
 }
 
 #tableview table thead th {
-  padding: 3px;
+  padding: 0px;
   position: sticky;
   top: 0;
   z-index: 1;
-  width: 25vw;
+  width: 0vw;
+  display: none;
 }
 
+/* 
 #tableview table thead th.black {
     background: black;
 }
@@ -319,7 +322,7 @@ canvas.hover {
 
 #table-data-eventObject.white.table-hover>tbody>tr:hover {
   background-color: #dfdfdf;
-}
+} */
 
 .modal.in .modal-dialog {
   margin: 0 auto;
