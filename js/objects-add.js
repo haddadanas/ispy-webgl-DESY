@@ -555,8 +555,8 @@ ispy.addEvent = function(event) {
     
     ispy.current_event = event;
     // Clear table from last event and show default caption
-    $('#collection-table').empty();
-    $('#collection-table').append(ispy.table_caption);
+    // $('#collection-table').empty();
+    // $('#collection-table').append(ispy.table_caption);
 
     // remove selectors for last event
     $("tr.Event").remove();
