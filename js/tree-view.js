@@ -2,8 +2,12 @@ ispy.addGroups = function() {
 
     ispy.gui.addFolder("Detector");
     ispy.gui.addFolder("Imported");
-    
+
+    ispy.gui_reduced.addFolder("Detector");
+	ispy.gui_reduced.addFolder("Momentum Cut");
+
     ispy.subfolders.Detector = [];
+	ispy.subfolders_red.Detector = [];
     ispy.subfolders.Imported = [];
     
     ispy.data_groups.forEach(function(gr) {
@@ -156,7 +160,9 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	min_energy: 10.0
     };
 
-    let folder = ispy.gui.__folders[group];
+	const guis = [ispy.gui, ispy.gui_reduced];
+	for (let gui_elem of guis) {
+    let folder = gui_elem.__folders[group];
     let sf = folder.__folders[name];
 
     ispy.subfolders[group].push(name);
@@ -395,4 +401,5 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 
     });
     
+};
 };

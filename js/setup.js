@@ -240,14 +240,23 @@ ispy.setupGUIs = function() {
 	autoPlace: false
     });
 
+    ispy.gui_reduced = new dat.GUI({
+	name: 'Controls',
+	hideable: false,
+	autoPlace: false
+    });
+
     ispy.gui.domElement.id = 'treegui';
-    document.getElementById('titlebar').appendChild(ispy.gui.domElement);
+    ispy.gui_reduced.domElement.id = 'treegui-reduced';
+    // document.getElementById('titlebar').appendChild(ispy.gui.domElement);
+    document.getElementById('titlebar').appendChild(ispy.gui_reduced.domElement);
     
     // It seems currently impossible with dat.gui
     // to fetch the folders as an array and remove them
     // (without knowing the name beforehand).
     // Therefore we have to keep track of them by-hand.
     ispy.subfolders = {};
+    ispy.subfolders_red = {};
 
 };
 
