@@ -95,7 +95,7 @@ canvas.hover {
   color: black;
   background-color: white;
 }
-
+/* The control panel */
 #treegui {
     position: absolute;
     top: 0;
@@ -240,7 +240,7 @@ canvas.hover {
 }
 
 #display {
-  height: 75vh;
+  height: 95vh;
   overflow: hidden;
   padding: 0;
 }
@@ -258,6 +258,7 @@ canvas.hover {
 #tableview {
   height: 25vh;
   overflow: auto;
+  display: none;
 }
 
 #tableview table thead th {
@@ -266,6 +267,7 @@ canvas.hover {
   top: 0;
   z-index: 1;
   width: 25vw;
+  display: none;
 }
 
 #tableview table thead th.black {

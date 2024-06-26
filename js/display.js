@@ -10,7 +10,7 @@ ispy.invertColors = function() {
     
     let ids = [
 	'event-info', 'titlebar', 'toolbar',
-	'display', 'tableview', 'browser-table',
+	'display', 'browser-table',
 	'browser-files', 'obj-table', 'obj-files'
     ];
 
@@ -25,7 +25,7 @@ ispy.invertColors = function() {
 
     let selectors = [
 	'treeview td.group', '#treeview td.collection',
-	'#tableview table thead th', '#browser-table th',
+	'#browser-table th',
 	'#obj-table th', '.modal-content', '.modal-title',
 	'#table-data-eventObject'
     ];
@@ -239,11 +239,11 @@ ispy.onMouseMove = function(e) {
 	    var original_color = ispy.intersected.material.color;
 	    ispy.intersected.material.color.setHex(0xcccccc);
 	    
-	    ispy.displayCollection(
-		ispy.intersected.name, "Physics", 
-		ispy.event_description[ispy.current_view][ispy.intersected.name].name, 
-		ispy.getObjectIds(ispy.scene.getObjectByName(ispy.intersected.name))
-	    );
+	    // ispy.displayCollection(
+		// ispy.intersected.name, "Physics", 
+		// ispy.event_description[ispy.current_view][ispy.intersected.name].name, 
+		// ispy.getObjectIds(ispy.scene.getObjectByName(ispy.intersected.name))
+	    // );
 	    
 	    ispy.highlightTableRow(ispy.intersected.name, ispy.intersected.userData, true);
 	    
@@ -401,80 +401,80 @@ document.addEventListener('keydown', function(e) {
 const mMuon2 = 0.10566*0.10566;
 const mElectron2 = 0.511e-3*0.511e-3;
 
-ispy.displayCollection = function(key, group, name, objectIds) {
+// ispy.displayCollection = function(key, group, name, objectIds) {
  
-    ispy.currentCollection = key;
+//     ispy.currentCollection = key;
  
-    const type = ispy.current_event.Types[key];
-    const collection = ispy.current_event.Collections[key];
+//     const type = ispy.current_event.Types[key];
+//     const collection = ispy.current_event.Collections[key];
 
-    const collectionTable = $('#collection-table');
+//     const collectionTable = $('#collection-table');
   
-    collectionTable.empty();
-    collectionTable.append('<caption>' + group + ': ' + name + '</caption>');
-    collectionTable.append('<thead> <tr>');
+//     collectionTable.empty();
+//     collectionTable.append('<caption>' + group + ': ' + name + '</caption>');
+//     collectionTable.append('<thead> <tr>');
     
-    const collectionTableHead = collectionTable.find('thead').find('tr');
+//     const collectionTableHead = collectionTable.find('thead').find('tr');
     
-    const color_class = ispy.inverted_colors ? 'group white' : 'group black';
+//     const color_class = ispy.inverted_colors ? 'group white' : 'group black';
 
-    collectionTableHead.append($('<th class="'+ color_class +'" data-sort="int"><i class="fa fa-sort"></i>index</th>'));
+//     collectionTableHead.append($('<th class="'+ color_class +'" data-sort="int"><i class="fa fa-sort"></i>index</th>'));
     
-    for ( let t in type ) {
+//     for ( let t in type ) {
 
-	let dataSort = type[t][1] === "double" ? "float" : type[t][1];
-	collectionTableHead.append($('<th class="'+ color_class +'" data-sort="' + dataSort + '"><i class="fa fa-sort"></i> ' + type[t][0] + '</th>'));
+// 	let dataSort = type[t][1] === "double" ? "float" : type[t][1];
+// 	collectionTableHead.append($('<th class="'+ color_class +'" data-sort="' + dataSort + '"><i class="fa fa-sort"></i> ' + type[t][0] + '</th>'));
   
-    }
+//     }
 
-    let index = 0;
+//     let index = 0;
     
-    for ( let c in collection ) {
+//     for ( let c in collection ) {
 	
-	let row_content = "<tr id='" + key.concat(index++) + "' onmouseenter='ispy.highlightObject(\"" + objectIds[c] + "\")' onmouseout='ispy.unHighlightObject()'>";
+// 	let row_content = "<tr id='" + key.concat(index++) + "' onmouseenter='ispy.highlightObject(\"" + objectIds[c] + "\")' onmouseout='ispy.unHighlightObject()'>";
 
-	let i = index-1;
-	row_content += "<td>"+ i + "</td>";
+// 	let i = index-1;
+// 	row_content += "<td>"+ i + "</td>";
 	
-	for ( let v in collection[c] ) {
+// 	for ( let v in collection[c] ) {
   
-	    row_content += "<td>"+collection[c][v]+"</td>";
+// 	    row_content += "<td>"+collection[c][v]+"</td>";
 
-	}
+// 	}
 
-	let rc = $(row_content);
-	collectionTable.append(rc);
+// 	let rc = $(row_content);
+// 	collectionTable.append(rc);
 	
-    }
+//     }
 
-    collectionTable.stupidtable({
+//     collectionTable.stupidtable({
 	   
-	"v3d":function(a,b) {
+// 	"v3d":function(a,b) {
 
-	    const aV3 = a.split(",");
-	    const bV3 = b.split(",");
+// 	    const aV3 = a.split(",");
+// 	    const bV3 = b.split(",");
 
-	    if ( aV3.length === 3 && bV3.length === 3 ) {
+// 	    if ( aV3.length === 3 && bV3.length === 3 ) {
 
-		const aLength = Math.sqrt(aV3[0] * aV3[0] + aV3[1] * aV3[1] + aV3[2] * aV3[2]);
-		const bLength = Math.sqrt(bV3[0] * bV3[0] + bV3[1] * bV3[1] + bV3[2] * bV3[2]);
+// 		const aLength = Math.sqrt(aV3[0] * aV3[0] + aV3[1] * aV3[1] + aV3[2] * aV3[2]);
+// 		const bLength = Math.sqrt(bV3[0] * bV3[0] + bV3[1] * bV3[1] + bV3[2] * bV3[2]);
 		
-		return aLength - bLength;
-	    }
+// 		return aLength - bLength;
+// 	    }
 
-	    return 1;
+// 	    return 1;
     
-	}
-    }).bind('aftertablesort', function(event, data){
+// 	}
+//     }).bind('aftertablesort', function(event, data){
 	
-	collectionTableHead.find('th').find('i').removeClass().addClass('fa fa-sort');
+// 	collectionTableHead.find('th').find('i').removeClass().addClass('fa fa-sort');
 	
-	const newClass = "fa fa-sort-" + data.direction;
-	collectionTableHead.find('th').eq(data.column).find('i').removeClass().addClass(newClass);
+// 	const newClass = "fa fa-sort-" + data.direction;
+// 	collectionTableHead.find('th').eq(data.column).find('i').removeClass().addClass(newClass);
 	
-    });
+//     });
     
-};
+// };
 
 ispy.showMass = function() {
 

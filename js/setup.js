@@ -544,7 +544,7 @@ ispy.init = function() {
     // Are we running an animation?
     ispy.animating = false;
 
-    ispy.setDisplayVerticalHeight(75);
+    ispy.setDisplayVerticalHeight(90);
     document.getElementById('vh-slider').value = ispy.vh;
     
     ispy.setFramerate(30);
