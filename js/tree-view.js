@@ -160,8 +160,11 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	min_energy: 10.0
     };
 
-	const guis = [ispy.gui, ispy.gui_reduced];
-	for (let gui_elem of guis) {
+	const guis = [ispy.gui];
+	if ( group.includes('Detector') ) {
+		guis.splice(1, 0, ispy.gui_reduced);
+	}
+	guis.forEach(function(gui_elem) {
     let folder = gui_elem.__folders[group];
     let sf = folder.__folders[name];
 
@@ -401,5 +404,5 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 
     });
     
-};
+});
 };

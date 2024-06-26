@@ -241,7 +241,7 @@ ispy.setupGUIs = function() {
     });
 
     ispy.gui_reduced = new dat.GUI({
-	name: 'Controls',
+	name: 'Controls Reduced',
 	hideable: false,
 	autoPlace: false
     });
