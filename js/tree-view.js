@@ -164,6 +164,9 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	if ( group.includes('Detector') ) {
 		guis.splice(1, 0, ispy.gui_reduced);
 	}
+	if ( group.includes('Momentum Cut') ) {
+		guis[0] = ispy.gui_reduced;
+	}
 	guis.forEach(function(gui_elem) {
     let folder = gui_elem.__folders[group];
     let sf = folder.__folders[name];
