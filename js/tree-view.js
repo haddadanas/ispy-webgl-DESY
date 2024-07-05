@@ -8,6 +8,7 @@ ispy.addGroups = function() {
 
     ispy.subfolders.Detector = [];
 	ispy.subfolders_red.Detector = [];
+	ispy.subfolders_red['Momentum Cut'] = [];
     ispy.subfolders.Imported = [];
     
     ispy.data_groups.forEach(function(gr) {
@@ -161,17 +162,18 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
     };
 
 	const guis = [ispy.gui];
+	const subfolders = [ispy.subfolders];
 	if ( group.includes('Detector') ) {
 		guis.splice(1, 0, ispy.gui_reduced);
-	}
-	if ( group.includes('Momentum Cut') ) {
-		guis[0] = ispy.gui_reduced;
+		subfolders.splice(1, 0, ispy.subfolders_red);
 	}
 	guis.forEach(function(gui_elem) {
     let folder = gui_elem.__folders[group];
     let sf = folder.__folders[name];
 
-    ispy.subfolders[group].push(name);
+	subfolders.forEach(function(subfolder) {
+		subfolder[group].push(name);
+	});
     
     sf = folder.addFolder(name);
 
@@ -408,4 +410,256 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
     });
     
 });
+};
+
+
+ispy.addMomentumRow = function(group, key, name, visible) {
+
+    let opacity = 1.0;
+    let color = new THREE.Color();
+    let linewidth = 1;
+    let min_pt = 1.0;
+    let min_et = 1.0;
+    let min_energy = 1.0;
+    let nobjects = 0;
+
+    view = '3D';
+
+    // TO-DO: Fetch pt and et from objects-config
+    const row_obj = {
+	show: visible,
+	number: nobjects,
+	key: key,
+	opacity: opacity,
+	color: '#'+color.getHexString(),
+	linewidth: linewidth,
+	min_pt: 1.0,
+	min_et: 10.0,
+	min_energy: 10.0
+    };
+
+	gui_elem = ispy.gui_reduced;
+	
+    let folder = gui_elem.__folders[group];
+    let sf = folder;
+
+    ispy.subfolders_red[group].push(name);
+    
+    sf = folder.addFolder(name);
+
+    if ( ! ( group.includes('Detector') ||
+	     group.includes('Imported') ||
+	     group.includes('Provenance')
+	   )
+       ) {
+
+	sf.add(row_obj, 'number');
+
+    }
+
+    sf.add(row_obj, 'key');
+    
+    sf.add(row_obj, 'show').onChange(function() {
+
+	ispy.toggle(key);
+
+    });
+
+    // Event is not part of the scene and is
+    // handled with css so no need for the rest
+    if ( key.includes('Event_') || group.includes('Imported') )
+	return;
+
+    sf.add(row_obj, 'opacity', 0, 1).onChange(function() {
+	
+	ispy.views.forEach(v => {
+	    
+	    let obj = ispy.scenes[v].getObjectByName(key);
+
+	    if ( ! obj )
+		return;
+
+	    obj.children.forEach(function(o) {
+
+		o.material.opacity = row_obj.opacity;
+
+	    });
+
+	});
+
+    });
+
+    if ( ispy.use_line2 ) {
+    
+	// This conditional could / should be improved
+	if ( key.includes('GEMDigis') || key.includes('GEMSegments') || key.includes('GEMRec') ||
+	     key.includes('CSCStrip') || key.includes('CSCSegments') || key.includes('CSCRec') ||
+	     key.includes('CSCWire') || key.includes('RPCRec') || key.includes('DTRecSegment') ) {
+
+	    sf.add(row_obj, 'linewidth', 1, 5).onChange(function() {
+
+		ispy.views.forEach(v => {
+		
+		    let obj = ispy.scenes[v].getObjectByName(key);
+
+		    if ( ! obj )
+			return;
+		    
+		    obj.children.forEach(function(o) {
+	    
+			o.material.linewidth = row_obj.linewidth*0.001;
+	    
+		    });
+
+		});
+
+	    });
+	
+	}
+
+    }
+
+    if ( ispy.use_line2 ) {
+
+	if ( key.includes('GlobalMuon') || key.includes('Electron') || key.includes('Photon') ) {
+	
+	    sf.add(row_obj, 'linewidth', 1, 5).onChange(function() {
+
+		ispy.views.forEach(v => {
+		
+		    let obj = ispy.scenes[v].getObjectByName(key);
+
+		    if ( ! obj )
+			return;
+		    
+		    obj.children.forEach(function(o) {
+	    
+			o.material.linewidth = row_obj.linewidth*0.001;
+	    
+		    });
+
+		});
+
+	    });
+
+	}
+	
+    }
+
+    if ( key.includes('Muons_') || key.includes('Electron') || key.includes('Tracks_') ) {
+
+	sf.add(row_obj, 'min_pt').onChange(function() {
+
+	    ispy.views.forEach(v => {
+	    
+		let obj = ispy.scenes[v].getObjectByName(key);
+
+		if ( ! obj )
+		    return;
+		
+		obj.children.forEach(function(o) {
+
+		    o.visible = o.userData.pt < row_obj.min_pt ? false : true;
+
+		});
+
+	    });
+
+	});
+
+    }
+
+    if ( key.includes('Jet') ) {
+
+	sf.add(row_obj, 'min_et').onChange(function() {
+
+	    ispy.views.forEach(v => {
+	    
+		let obj = ispy.scenes[v].getObjectByName(key);
+
+		if ( ! obj )
+		    return;
+		
+		obj.children.forEach(function(o) {
+
+		    o.visible = o.userData.et < row_obj.min_et ? false : true;
+		    
+		});
+
+	    });
+
+	});
+
+    }
+
+    if ( key.includes('Photon') ) {
+
+	sf.add(row_obj, 'min_energy').onChange(function() {
+
+	    ispy.views.forEach(v => {
+	    
+		let obj = ispy.scenes[v].getObjectByName(key);
+
+		if ( ! obj )
+		    return;
+		
+		obj.children.forEach(function(o) {
+
+		    o.visible = o.userData.energy < row_obj.min_energy ? false : true;
+
+		});
+
+	    });
+
+	});
+
+    }
+
+    sf.addColor(row_obj, 'color').onChange(function() {
+
+	ispy.views.forEach(v => {
+
+	    let obj = ispy.scenes[v].getObjectByName(key);
+
+	    if ( ! obj )
+		return;
+	    
+	    // Change color in event_decription for objects in
+	    // Physics group. Once they are picked (i.e. pointer over)
+	    // the color will revert to this new one rather than to the original
+	    if ( group.includes('Physics') ) {
+
+		ispy.event_description[v][key].style.color = row_obj.color;
+		
+	    }
+	
+	    obj.children.forEach(function(o) {
+
+		o.traverse(function(oc) {
+
+		    // Special case to handle
+		    if ( oc.type === 'ArrowHelper' ||
+			 key.includes('MET') ||
+			 key.includes('Proton') ) {
+		    
+			oc.children.forEach(function(og) {
+
+			    og.material.color = new THREE.Color(row_obj.color);
+
+			});
+		    
+		    } else {
+		
+			oc.material.color = new THREE.Color(row_obj.color);
+			
+		    }
+		    
+		});
+	    
+	    });
+	    
+	});
+
+    });
+
 };
