@@ -447,15 +447,20 @@ ispy.addMomentumRow = function(group, key, visible) {
 
 	    ispy.views.forEach(v => {
 	    
-		let obj = ispy.scenes[v].getObjectByName(key);
+		let physic_objs = [
+			...ispy.scenes[v].getObjectByName('Physics').children,
+			...ispy.scenes[v].getObjectByName('Tracking').children
+		].filter((o) => o.visible && o.children[0].userData.hasOwnProperty("pt"));
 
-		if ( ! obj )
+		if ( ! physic_objs.length )
 		    return;
-		
-		obj.children.forEach(function(o) {
 
-		    o.visible = o.userData.pt < row_obj.min_pt ? false : true;
+		physic_objs.forEach(function(obj) {
+		    obj.children.forEach(function(o) {
 
+			o.visible = o.userData.pt < row_obj.min_pt ? false : true;
+
+		    });
 		});
 
 	    });
