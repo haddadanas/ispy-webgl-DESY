@@ -2,8 +2,13 @@ ispy.addGroups = function() {
 
     ispy.gui.addFolder("Detector");
     ispy.gui.addFolder("Imported");
-    
+
+    ispy.gui_reduced.addFolder("Detector");
+	ispy.gui_reduced.addFolder("Momentum Cut");
+
     ispy.subfolders.Detector = [];
+	ispy.subfolders_red.Detector = [];
+	ispy.subfolders_red['Momentum Cut'] = [];
     ispy.subfolders.Imported = [];
     
     ispy.data_groups.forEach(function(gr) {
@@ -156,10 +161,19 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	min_energy: 10.0
     };
 
-    let folder = ispy.gui.__folders[group];
+	const guis = [ispy.gui];
+	const subfolders = [ispy.subfolders];
+	if ( group.includes('Detector') ) {
+		guis.splice(1, 0, ispy.gui_reduced);
+		subfolders.splice(1, 0, ispy.subfolders_red);
+	}
+	guis.forEach(function(gui_elem) {
+    let folder = gui_elem.__folders[group];
     let sf = folder.__folders[name];
 
-    ispy.subfolders[group].push(name);
+	subfolders.forEach(function(subfolder) {
+		subfolder[group].push(name);
+	});
     
     sf = folder.addFolder(name);
 
@@ -181,10 +195,10 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	
 	sf.domElement.onclick = function(e) {
 	    
-	    ispy.displayCollection(
-		key, group, name,
-		ispy.getObjectIds(ispy.scene.getObjectByName(key))
-	    );
+	    // ispy.displayCollection(
+		// key, group, name,
+		// ispy.getObjectIds(ispy.scene.getObjectByName(key))
+	    // );
 	    
 	};
 	
@@ -395,4 +409,62 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 
     });
     
+});
+};
+
+
+ispy.addMomentumRow = function(group, key, visible) {
+
+    let opacity = 1.0;
+    let color = new THREE.Color();
+    let linewidth = 1;
+    let min_pt = 1.0;
+    let min_et = 1.0;
+    let min_energy = 1.0;
+    let nobjects = 0;
+
+    view = '3D';
+
+    // TO-DO: Fetch pt and et from objects-config
+    const row_obj = {
+	show: visible,
+	number: nobjects,
+	key: key,
+	opacity: opacity,
+	color: '#'+color.getHexString(),
+	linewidth: linewidth,
+	min_pt: 1.0,
+	min_et: 10.0,
+	min_energy: 10.0
+    };
+
+	gui_elem = ispy.gui_reduced;
+	
+    let folder = gui_elem.__folders[group];
+    let sf = folder;
+
+	sf.add(row_obj, 'min_pt').onChange(function() {
+
+	    ispy.views.forEach(v => {
+	    
+		let physic_objs = [
+			...ispy.scenes[v].getObjectByName('Physics').children,
+			...ispy.scenes[v].getObjectByName('Tracking').children
+		].filter((o) => o.visible && o.children[0].userData.hasOwnProperty("pt"));
+
+		if ( ! physic_objs.length )
+		    return;
+
+		physic_objs.forEach(function(obj) {
+		    obj.children.forEach(function(o) {
+
+			o.visible = o.userData.pt < row_obj.min_pt ? false : true;
+
+		    });
+		});
+
+	    });
+
+	});
+
 };

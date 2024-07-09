@@ -1254,6 +1254,15 @@ ispy.event_description = {
 
 };
 
+
+ispy.pt_controls = {
+	"PtCut_V1": {
+		type: ispy.CUT, on: true, group: "Momentum Cut", name: "Pt Cut",
+		selection: {"min_pt":1.0, "index":0}
+    },
+}
+
+
 ispy.disabled = [];
 
 for ( let view in ispy.detector_description ) {
@@ -1293,4 +1302,4 @@ ispy.data_groups = [
     "Physics"
 ];
 
-ispy.table_caption = '<caption>Click on a name under "Provenance", "Tracking", "ECAL", "HCAL", "Muon", and "Physics" to view contents in table</caption>';
+// ispy.table_caption = '<caption>Click on a name under "Provenance", "Tracking", "ECAL", "HCAL", "Muon", and "Physics" to view contents in table</caption>';

@@ -95,7 +95,7 @@ canvas.hover {
   color: black;
   background-color: white;
 }
-
+/* The control panel */
 #treegui {
     position: absolute;
     top: 0;
@@ -103,9 +103,21 @@ canvas.hover {
     z-index: 1002;
     padding-top: 0px;
     padding-right: 0px;
-    display: block;
+    display: none;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
+}
+
+#treegui-reduced {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1002;
+  padding-top: 0px;
+  padding-right: 0px;
+  display: block;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
 }
 
 #rphigui {
@@ -240,7 +252,7 @@ canvas.hover {
 }
 
 #display {
-  height: 75vh;
+  height: 95vh;
   overflow: hidden;
   padding: 0;
 }
@@ -258,6 +270,7 @@ canvas.hover {
 #tableview {
   height: 25vh;
   overflow: auto;
+  display: none;
 }
 
 #tableview table thead th {
@@ -266,6 +279,7 @@ canvas.hover {
   top: 0;
   z-index: 1;
   width: 25vw;
+  display: none;
 }
 
 #tableview table thead th.black {
