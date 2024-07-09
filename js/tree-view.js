@@ -443,7 +443,7 @@ ispy.addMomentumRow = function(group, key, visible) {
     let folder = gui_elem.__folders[group];
     let sf = folder;
 
-	sf.add(row_obj, 'min_pt').onChange(function() {
+	sf.add(row_obj, 'min_pt', 0, 100).onChange(function() {
 
 	    ispy.views.forEach(v => {
 	    
