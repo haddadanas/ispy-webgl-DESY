@@ -37,6 +37,11 @@ ispy.clearSubfolders = function() {
 	    
     });
 
+	ispy.subfolders_red['Momentum Cut'].forEach(function(s) {
+		ispy.gui_reduced.__folders["Momentum Cut"].remove(s);
+	});
+
+	ispy.subfolders_red['Momentum Cut'] = [];
     
 };
 
@@ -413,39 +418,31 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 };
 
 
-ispy.addMomentumRow = function(group, key, visible) {
+ispy.addMomentumRow = function(group) {
 
-    let opacity = 1.0;
     let color = new THREE.Color();
     let linewidth = 1;
     let min_pt = 1.0;
-    let min_et = 1.0;
-    let min_energy = 1.0;
     let nobjects = 0;
+	let PFJets = false;
+	let MET = false;
 
     view = '3D';
 
     // TO-DO: Fetch pt and et from objects-config
     const row_obj = {
-	show: visible,
 	number: nobjects,
-	key: key,
-	opacity: opacity,
 	color: '#'+color.getHexString(),
 	linewidth: linewidth,
-	min_pt: 1.0,
-	min_et: 10.0,
-	min_energy: 10.0
+	min_pt: min_pt,
+	PFJets: PFJets,
+	MET: MET
     };
 
 	gui_elem = ispy.gui_reduced;
 	
     let folder = gui_elem.__folders[group];
 
-	if (folder.__controllers.length == 1) {
-		folder.__controllers[0].setValue(1);
-		return;
-	}
 
 	folder.add(row_obj, 'min_pt', 0, 100).onChange(function() {
 
@@ -469,6 +466,25 @@ ispy.addMomentumRow = function(group, key, visible) {
 
 	    });
 
+	});
+
+	folder.add(row_obj, 'PFJets').onChange(function() {
+		ispy.views.forEach(v => {
+			jet_obj = ispy.scenes[v].getObjectByName('PFJets_V1')
+			jet_obj.visible = !jet_obj.visible
+		});	
+	});
+
+	folder.add(row_obj, 'MET').onChange(function() {
+		ispy.views.forEach(v => {
+			met_obj = ispy.scenes[v].getObjectByName('PFMETs_V1')
+			met_obj.visible = !met_obj.visible
+		});	
+	});
+
+	// add all controllers to the reduced subfolders for convenience
+	folder.__controllers.forEach(function(c) {
+		ispy.subfolders_red[group].push(c);
 	});
 
 };
