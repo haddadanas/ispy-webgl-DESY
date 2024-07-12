@@ -569,6 +569,7 @@ ispy.addEvent = function(event) {
 	ispy.addToScene(event, v);
 
     });
+	ispy.addMomentumRow("Momentum Cut", "PtCut_V1", true);
 
     ispy.showView(ispy.current_view);
     

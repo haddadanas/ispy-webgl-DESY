@@ -1131,6 +1131,4 @@ ispy.importDetector = function() {
     }
     
     loadGLTFs();
-
-	ispy.addMomentumRow("Momentum Cut", "PtCut_V1", true);
 };
