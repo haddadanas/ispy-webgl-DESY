@@ -1254,15 +1254,6 @@ ispy.event_description = {
 
 };
 
-
-ispy.pt_controls = {
-	"PtCut_V1": {
-		type: ispy.CUT, on: true, group: "Momentum Cut", name: "Pt Cut",
-		selection: {"min_pt":1.0, "index":0}
-    },
-}
-
-
 ispy.disabled = [];
 
 for ( let view in ispy.detector_description ) {

@@ -569,7 +569,7 @@ ispy.addEvent = function(event) {
 	ispy.addToScene(event, v);
 
     });
-	ispy.addMomentumRow("Momentum Cut");
+	ispy.addControllers("Momentum Cut");
 
     ispy.showView(ispy.current_view);
     

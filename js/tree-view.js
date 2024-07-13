@@ -3,13 +3,16 @@ ispy.addGroups = function() {
     ispy.gui.addFolder("Detector");
     ispy.gui.addFolder("Imported");
 
-    ispy.gui_reduced.addFolder("Detector");
-	ispy.gui_reduced.addFolder("Momentum Cut");
+    ispy.guiReduced.addFolder("Detector");
+	ispy.guiReduced.addFolder("Momentum Cut");
+	ispy.guiReduced.addFolder("Show/Hide");
 
+	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
-	ispy.subfolders_red.Detector = [];
-	ispy.subfolders_red['Momentum Cut'] = [];
     ispy.subfolders.Imported = [];
+
+	ispy.subfoldersReduced.Detector = [];
+	ispy.subfoldersReduced['Controllers'] = [];
     
     ispy.data_groups.forEach(function(gr) {
 
@@ -37,11 +40,11 @@ ispy.clearSubfolders = function() {
 	    
     });
 
-	ispy.subfolders_red['Momentum Cut'].forEach(function(s) {
-		ispy.gui_reduced.__folders["Momentum Cut"].remove(s);
+	ispy.subfoldersReduced['Controllers'].forEach(function(s) {
+		s.remove();
 	});
 
-	ispy.subfolders_red['Momentum Cut'] = [];
+	ispy.subfoldersReduced['Controllers'] = [];
     
 };
 
@@ -169,8 +172,8 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	const guis = [ispy.gui];
 	const subfolders = [ispy.subfolders];
 	if ( group.includes('Detector') ) {
-		guis.splice(1, 0, ispy.gui_reduced);
-		subfolders.splice(1, 0, ispy.subfolders_red);
+		guis.splice(1, 0, ispy.guiReduced);
+		subfolders.splice(1, 0, ispy.subfoldersReduced);
 	}
 	guis.forEach(function(gui_elem) {
     let folder = gui_elem.__folders[group];
@@ -418,7 +421,7 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 };
 
 
-ispy.addMomentumRow = function(group) {
+ispy.addControllers = function(group) {
 
     let color = new THREE.Color();
     let linewidth = 1;
@@ -439,7 +442,7 @@ ispy.addMomentumRow = function(group) {
 	MET: MET
     };
 
-	gui_elem = ispy.gui_reduced;
+	gui_elem = ispy.guiReduced;
 	
     let folder = gui_elem.__folders[group];
 
@@ -484,7 +487,7 @@ ispy.addMomentumRow = function(group) {
 
 	// add all controllers to the reduced subfolders for convenience
 	folder.__controllers.forEach(function(c) {
-		ispy.subfolders_red[group].push(c);
+		ispy.subfoldersReduced["Controllers"].push(c);
 	});
 
 };
