@@ -561,6 +561,9 @@ ispy.addEvent = function(event) {
     // remove selectors for last event
     $("tr.Event").remove();
 
+	// If saveSetting is active, save the current event preferences
+	let currentSetting = ispy.saveCutSettings();
+
     // Clear the subfolders for event information in the treegui
     ispy.clearSubfolders();
     
@@ -569,7 +572,18 @@ ispy.addEvent = function(event) {
 	ispy.addToScene(event, v);
 
     });
+
+	if ( ispy.current_event.EventInfo ) {
+	
+		ispy.addEventInfo(ispy.current_event.EventInfo);
+	
+	}
+
 	ispy.addControllers("Momentum Cut");
+	ispy.addControllers("Show/Hide");
+
+	// If currentSetting is active, load the saved event preferences
+	currentSetting = ispy.applySavedSettings(currentSetting);
 
     ispy.showView(ispy.current_view);
     
