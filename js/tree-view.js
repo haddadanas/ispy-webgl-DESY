@@ -1,16 +1,21 @@
 ispy.addGroups = function() {
+	// Add option to keep user cuts and preferences when switching between events
+	ispy.guiReduced.add({"Keep Settings": false}, 'Keep Settings')
 
     ispy.gui.addFolder("Detector");
     ispy.gui.addFolder("Imported");
 
-    ispy.gui_reduced.addFolder("Detector");
-	ispy.gui_reduced.addFolder("Momentum Cut");
+    ispy.guiReduced.addFolder("Detector");
+	ispy.guiReduced.addFolder("Momentum Cut");
+	ispy.guiReduced.addFolder("Show/Hide");
 
+	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
-	ispy.subfolders_red.Detector = [];
-	ispy.subfolders_red['Momentum Cut'] = [];
     ispy.subfolders.Imported = [];
-    
+
+	ispy.subfoldersReduced.Detector = [];
+	ispy.subfoldersReduced['Controllers'] = [];
+
     ispy.data_groups.forEach(function(gr) {
 
 	ispy.gui.addFolder(gr);
@@ -37,6 +42,11 @@ ispy.clearSubfolders = function() {
 	    
     });
 
+	ispy.subfoldersReduced['Controllers'].forEach(function(s) {
+		s.remove();
+	});
+
+	ispy.subfoldersReduced['Controllers'] = [];
     
 };
 
@@ -164,8 +174,8 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	const guis = [ispy.gui];
 	const subfolders = [ispy.subfolders];
 	if ( group.includes('Detector') ) {
-		guis.splice(1, 0, ispy.gui_reduced);
-		subfolders.splice(1, 0, ispy.subfolders_red);
+		guis.splice(1, 0, ispy.guiReduced);
+		subfolders.splice(1, 0, ispy.subfoldersReduced);
 	}
 	guis.forEach(function(gui_elem) {
     let folder = gui_elem.__folders[group];
@@ -413,62 +423,151 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 };
 
 
-ispy.addMomentumRow = function(group, key, visible) {
+ispy.addControllers = function(group) {
 
-    let opacity = 1.0;
     let color = new THREE.Color();
     let linewidth = 1;
     let min_pt = 1.0;
-    let min_et = 1.0;
-    let min_energy = 1.0;
+	let jet_min_et = 1.0;
     let nobjects = 0;
+	let hidden = false;
+	let visible = true;
 
-    view = '3D';
-
-    // TO-DO: Fetch pt and et from objects-config
     const row_obj = {
-	show: visible,
 	number: nobjects,
-	key: key,
-	opacity: opacity,
-	color: '#'+color.getHexString(),
-	linewidth: linewidth,
-	min_pt: 1.0,
-	min_et: 10.0,
-	min_energy: 10.0
+	min_pt: min_pt,
+	Jets: hidden,
+	MET: hidden,
+	"Jet: min Et": jet_min_et,
+	"Additional Tracks": visible
     };
 
-	gui_elem = ispy.gui_reduced;
+	gui_elem = ispy.guiReduced;
 	
     let folder = gui_elem.__folders[group];
 
-	if (folder.__controllers.length == 1) {
-		folder.__controllers[0].setValue(1);
-		return;
+	let names = ispy.getSceneObjects();
+
+	if (group.includes('Momentum Cut')) {
+		folder.add(row_obj, 'min_pt', 0, 100).onChange(function() {
+			
+			ispy.views.forEach(v => {
+	    
+				let physic_objs = [
+					...ispy.scenes[v].getObjectByName('Physics').children,
+					...ispy.scenes[v].getObjectByName('Tracking').children
+				].filter((o) => o.visible && o.children[0].userData.hasOwnProperty("pt"));
+				
+				if ( ! physic_objs.length )
+					return;
+				
+				physic_objs.forEach(function(obj) {
+					obj.children.forEach(function(o) {
+						
+						o.visible = o.userData.pt < row_obj.min_pt ? false : true;
+						
+					});
+				});
+				
+			});
+			
+		});
+		
+		folder.add(row_obj, 'Jet: min Et', 0, 200).onChange(function() {
+
+			ispy.views.forEach(v => {
+	    
+				let physic_objs = ispy.scenes[v].getObjectByName(names['PFJets']).children
+
+				if ( ! physic_objs.length )
+					return;
+				
+				physic_objs.forEach(function(o) {
+					
+					o.visible = o.userData.et < row_obj["Jet: min Et"] ? false : true;
+					
+				});
+				
+			});
+			
+		});
+	}
+		
+	if (group.includes('Show/Hide')) {
+		folder.add(row_obj, 'Jets').onChange(function() {
+		ispy.views.forEach(v => {
+			jet_obj = ispy.scenes[v].getObjectByName(names['PFJets'])
+			jet_obj.visible = !jet_obj.visible
+		});	
+	});
+
+	folder.add(row_obj, 'MET').onChange(function() {
+		ispy.views.forEach(v => {
+			met_obj = ispy.scenes[v].getObjectByName(names['PFMETs'])
+			met_obj.visible = !met_obj.visible
+		});	
+	});
+
+	// folder.add(row_obj, 'Additional Tracks').onChange(function() {
+	// 	ispy.views.forEach(v => {
+	// 		tracks = ispy.scenes[v].getObjectByName(names['Tracks'])
+	// 		tracks.visible = !tracks.visible
+	// 	});	
+	// });
+
 	}
 
-	folder.add(row_obj, 'min_pt', 0, 100).onChange(function() {
-
-	    ispy.views.forEach(v => {
-	    
-		let physic_objs = [
-			...ispy.scenes[v].getObjectByName('Physics').children,
-			...ispy.scenes[v].getObjectByName('Tracking').children
-		].filter((o) => o.visible && o.children[0].userData.hasOwnProperty("pt"));
-
-		if ( ! physic_objs.length )
-		    return;
-
-		physic_objs.forEach(function(obj) {
-		    obj.children.forEach(function(o) {
-
-			o.visible = o.userData.pt < row_obj.min_pt ? false : true;
-
-		    });
-		});
-
-	    });
-
+	// add all controllers to the reduced subfolders for convenience
+	folder.__controllers.forEach(function(c) {
+		ispy.subfoldersReduced["Controllers"].push(c);
 	});
 
 };
+
+ispy.saveCutSettings = function() {
+	let settings = {};
+	btn = ispy.guiReduced.__controllers.find(o => o.property == "Keep Settings");
+	if (btn && btn.getValue()) {
+		controllers = ispy.subfoldersReduced["Controllers"];
+		controllers.forEach(function(c) {
+			settings[c.property] = c.getValue();
+		});
+	}
+	return settings;
+};
+
+ispy.applySavedSettings = function(settings) {
+	if (!Object.keys(settings).length) {
+		return;
+	};
+	controllers = ispy.subfoldersReduced["Controllers"];
+	controllers.forEach(function(c) {
+		if (setting = settings[c.property]) {
+			c.setValue(setting);
+		}
+	});
+	return {};
+};
+
+ispy.getSceneObjects = function() {
+	// Get all object names in the scene
+	// TODO also get the objects themself to refactor this from addControllers
+	// objects = {};
+	// ispy.views.forEach((v) => {
+	// 	objects[v] = [
+	// 	...ispy.scenes["3D"].getObjectByName('Physics').children,
+	// 	...ispy.scenes["3D"].getObjectByName('Tracking').children
+	// ].reduce((dic, o) => {
+	// 	dic[o.name.replace(/_V\d/g, '')] = o;
+	// 	return dic;
+	// }, {});
+	// });
+	// return objects;
+	return [
+			...ispy.scenes["3D"].getObjectByName('Physics').children,
+			...ispy.scenes["3D"].getObjectByName('Tracking').children
+		].reduce((dic, o) => {
+			dic[o.name.replace(/_V\d/g, '')] = o.name;
+			return dic;
+		}, {});
+}
