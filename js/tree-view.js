@@ -6,8 +6,6 @@ ispy.addGroups = function() {
     ispy.gui.addFolder("Imported");
 
     ispy.guiReduced.addFolder("Detector");
-	ispy.guiReduced.addFolder("Momentum Cut");
-	ispy.guiReduced.addFolder("Show/Hide");
 
 	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
@@ -24,6 +22,10 @@ ispy.addGroups = function() {
 	
     });
 
+	ispy.reduced_data_groups.forEach(function(gr) {
+		ispy.guiReduced.addFolder(gr.name);
+	});
+	
 };
 
 ispy.clearSubfolders = function() {
@@ -522,6 +524,10 @@ ispy.addControllers = function(group) {
 		ispy.subfoldersReduced["Controllers"].push(c);
 	});
 
+};
+
+ispy.addInfo = function() { // TODO
+	
 };
 
 ispy.saveCutSettings = function() {
