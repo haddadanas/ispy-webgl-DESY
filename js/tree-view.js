@@ -526,8 +526,36 @@ ispy.addControllers = function(group) {
 
 };
 
-ispy.addInfo = function() { // TODO
+ispy.addInfo = function(group) { // TODO
+
+	let color = new THREE.Color();
+    let linewidth = 1;
+    let min_pt = 1.0;
+    let nobjects = 0;
+	let hidden = false;
+	let visible = true;
+
 	
+	gui_elem = ispy.guiReduced;
+	
+    let folder = gui_elem.__folders[group];
+	
+	let names = ispy.getSceneObjects();
+	met_pt = ispy.scenes["3D"].getObjectByName(names['PFMETs'])
+
+    const row_obj = {
+	number: nobjects,
+	min_pt: min_pt,
+	MET: 3,
+    };
+
+	folder.add(row_obj, 'MET').onChange(function() {
+		ispy.views.forEach(v => {
+			met_obj = ispy.scenes[v].getObjectByName(names['PFMETs'])
+			met_obj.visible = !met_obj.visible
+		});	
+	});
+
 };
 
 ispy.saveCutSettings = function() {
