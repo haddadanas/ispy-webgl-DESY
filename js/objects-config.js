@@ -1293,4 +1293,11 @@ ispy.data_groups = [
     "Physics"
 ];
 
+ispy.reduced_data_groups = [
+	{name: "Momentum Cut", function: (group) => ispy.addControllers(group)},
+	{name: "Show/Hide", function: (group) => ispy.addControllers(group)},
+	{name: "Event Info", function: (group) => ispy.addInfo(group)},
+	{name: "Event Selection", function: (group) => ispy.addControllers(group)},
+];
+
 // ispy.table_caption = '<caption>Click on a name under "Provenance", "Tracking", "ECAL", "HCAL", "Muon", and "Physics" to view contents in table</caption>';

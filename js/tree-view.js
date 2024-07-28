@@ -6,8 +6,6 @@ ispy.addGroups = function() {
     ispy.gui.addFolder("Imported");
 
     ispy.guiReduced.addFolder("Detector");
-	ispy.guiReduced.addFolder("Momentum Cut");
-	ispy.guiReduced.addFolder("Show/Hide");
 
 	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
@@ -15,6 +13,7 @@ ispy.addGroups = function() {
 
 	ispy.subfoldersReduced.Detector = [];
 	ispy.subfoldersReduced['Controllers'] = [];
+	ispy.subfoldersReduced['Info'] = [];
 
     ispy.data_groups.forEach(function(gr) {
 
@@ -24,6 +23,10 @@ ispy.addGroups = function() {
 	
     });
 
+	ispy.reduced_data_groups.forEach(function(gr) {
+		ispy.guiReduced.addFolder(gr.name);
+	});
+	
 };
 
 ispy.clearSubfolders = function() {
@@ -48,6 +51,12 @@ ispy.clearSubfolders = function() {
 
 	ispy.subfoldersReduced['Controllers'] = [];
     
+	ispy.subfoldersReduced['Info'].forEach(function(s) {
+		s.remove();
+	}
+	);
+
+	ispy.subfoldersReduced['Info'] = [];
 };
 
 ispy.toggle = function(key) {
@@ -520,6 +529,29 @@ ispy.addControllers = function(group) {
 	// add all controllers to the reduced subfolders for convenience
 	folder.__controllers.forEach(function(c) {
 		ispy.subfoldersReduced["Controllers"].push(c);
+	});
+
+};
+
+ispy.addInfo = function(group) { // TODO
+
+	gui_elem = ispy.guiReduced;
+	
+    let folder = gui_elem.__folders[group];
+	
+	let names = ispy.getSceneObjects();
+	// pt is element 1 in the collection object (inconvinient definition by design)
+	met_pt = ispy.current_event.Collections[names['PFMETs']][0][1];
+
+    const row_obj = {
+	MET: met_pt.toFixed(2) + " GeV",
+    };
+
+	folder.add(row_obj, 'MET');
+
+	// add all controllers to the reduced subfolders for convenience
+	folder.__controllers.forEach(function(c) {
+		ispy.subfoldersReduced["Info"].push(c);
 	});
 
 };

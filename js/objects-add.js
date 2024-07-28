@@ -579,8 +579,10 @@ ispy.addEvent = function(event) {
 	
 	}
 
-	ispy.addControllers("Momentum Cut");
-	ispy.addControllers("Show/Hide");
+	// add the controllers to the reduced GUI
+	ispy.reduced_data_groups.forEach(({name: n, function: addFunc}) => {
+		addFunc(n);
+	});
 
 	// If currentSetting is active, load the saved event preferences
 	currentSetting = ispy.applySavedSettings(currentSetting);
