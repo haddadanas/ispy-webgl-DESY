@@ -13,6 +13,7 @@ ispy.addGroups = function() {
 
 	ispy.subfoldersReduced.Detector = [];
 	ispy.subfoldersReduced['Controllers'] = [];
+	ispy.subfoldersReduced['Info'] = [];
 
     ispy.data_groups.forEach(function(gr) {
 
@@ -50,6 +51,12 @@ ispy.clearSubfolders = function() {
 
 	ispy.subfoldersReduced['Controllers'] = [];
     
+	ispy.subfoldersReduced['Info'].forEach(function(s) {
+		s.remove();
+	}
+	);
+
+	ispy.subfoldersReduced['Info'] = [];
 };
 
 ispy.toggle = function(key) {
@@ -528,32 +535,23 @@ ispy.addControllers = function(group) {
 
 ispy.addInfo = function(group) { // TODO
 
-	let color = new THREE.Color();
-    let linewidth = 1;
-    let min_pt = 1.0;
-    let nobjects = 0;
-	let hidden = false;
-	let visible = true;
-
-	
 	gui_elem = ispy.guiReduced;
 	
     let folder = gui_elem.__folders[group];
 	
 	let names = ispy.getSceneObjects();
-	met_pt = ispy.scenes["3D"].getObjectByName(names['PFMETs'])
+	// pt is element 1 in the collection object (inconvinient definition by design)
+	met_pt = ispy.current_event.Collections[names['PFMETs']][0][1];
 
     const row_obj = {
-	number: nobjects,
-	min_pt: min_pt,
-	MET: 3,
+	MET: met_pt.toFixed(2) + " GeV",
     };
 
-	folder.add(row_obj, 'MET').onChange(function() {
-		ispy.views.forEach(v => {
-			met_obj = ispy.scenes[v].getObjectByName(names['PFMETs'])
-			met_obj.visible = !met_obj.visible
-		});	
+	folder.add(row_obj, 'MET');
+
+	// add all controllers to the reduced subfolders for convenience
+	folder.__controllers.forEach(function(c) {
+		ispy.subfoldersReduced["Info"].push(c);
 	});
 
 };
