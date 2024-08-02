@@ -6,6 +6,7 @@ ispy.addGroups = function() {
     ispy.gui.addFolder("Imported");
 
     ispy.guiReduced.addFolder("Detector");
+	ispy.guiReduced.addFolder("Event Selection");
 
 	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
@@ -14,6 +15,7 @@ ispy.addGroups = function() {
 	ispy.subfoldersReduced.Detector = [];
 	ispy.subfoldersReduced['Controllers'] = [];
 	ispy.subfoldersReduced['Info'] = [];
+	ispy.subfoldersReduced['Selection'] = [];
 
     ispy.data_groups.forEach(function(gr) {
 
@@ -45,18 +47,12 @@ ispy.clearSubfolders = function() {
 	    
     });
 
-	ispy.subfoldersReduced['Controllers'].forEach(function(s) {
-		s.remove();
+	["Controllers", "Info"].forEach(function(g) {
+		ispy.subfoldersReduced[g].forEach(function(s) {
+			s.remove()
+		});
+		ispy.subfoldersReduced[g] = [];
 	});
-
-	ispy.subfoldersReduced['Controllers'] = [];
-    
-	ispy.subfoldersReduced['Info'].forEach(function(s) {
-		s.remove();
-	}
-	);
-
-	ispy.subfoldersReduced['Info'] = [];
 };
 
 ispy.toggle = function(key) {
@@ -517,7 +513,7 @@ ispy.addControllers = function(group) {
 		});	
 	});
 
-	// folder.add(row_obj, 'Additional Tracks').onChange(function() {
+	// folder.add(row_obj, 'Additional Tracks').onChange(function() { // BUG - does not work properly with Keep Settings
 	// 	ispy.views.forEach(v => {
 	// 		tracks = ispy.scenes[v].getObjectByName(names['Tracks'])
 	// 		tracks.visible = !tracks.visible
@@ -533,7 +529,7 @@ ispy.addControllers = function(group) {
 
 };
 
-ispy.addInfo = function(group) { // TODO
+ispy.addInfo = function(group) {
 
 	gui_elem = ispy.guiReduced;
 	
