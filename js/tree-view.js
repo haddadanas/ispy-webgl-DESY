@@ -547,7 +547,10 @@ ispy.addInfo = function(group) { // TODO
 	MET: met_pt.toFixed(2) + " GeV",
     };
 
-	folder.add(row_obj, 'MET');
+	folder.add(row_obj, 'MET').onFinishChange(function() {
+		// reset to original value
+		this.setValue(this.initialValue);
+	});
 
 	// add all controllers to the reduced subfolders for convenience
 	folder.__controllers.forEach(function(c) {
