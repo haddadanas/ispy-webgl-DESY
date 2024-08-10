@@ -500,25 +500,30 @@ ispy.addControllers = function(group) {
 		
 	if (group.includes('Show/Hide')) {
 		folder.add(row_obj, 'Jets').onChange(function() {
-		ispy.views.forEach(v => {
-			jet_obj = ispy.scenes[v].getObjectByName(names['PFJets'])
-			jet_obj.visible = !jet_obj.visible
-		});	
-	});
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				jet_obj = ispy.scenes[v].getObjectByName(names['PFJets']);
+				if (!jet_obj) return;
+				jet_obj.visible = val;
+			});	
+		});
 
-	folder.add(row_obj, 'MET').onChange(function() {
-		ispy.views.forEach(v => {
-			met_obj = ispy.scenes[v].getObjectByName(names['PFMETs'])
-			met_obj.visible = !met_obj.visible
-		});	
-	});
+		folder.add(row_obj, 'MET').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				met_obj = ispy.scenes[v].getObjectByName(names['PFMETs']);
+				met_obj.visible = val;
+			});	
+		});
 
-	// folder.add(row_obj, 'Additional Tracks').onChange(function() { // BUG - does not work properly with Keep Settings
-	// 	ispy.views.forEach(v => {
-	// 		tracks = ispy.scenes[v].getObjectByName(names['Tracks'])
-	// 		tracks.visible = !tracks.visible
-	// 	});	
-	// });
+		folder.add(row_obj, 'Additional Tracks').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				tracks = ispy.scenes[v].getObjectByName(names['Tracks']);
+				if (!tracks) return;
+				tracks.visible = val;
+			});	
+		});
 
 	}
 
@@ -573,8 +578,8 @@ ispy.applySavedSettings = function(settings) {
 	};
 	controllers = ispy.subfoldersReduced["Controllers"];
 	controllers.forEach(function(c) {
-		if (setting = settings[c.property]) {
-			c.setValue(setting);
+		if (c.property in settings) {
+			c.setValue(settings[c.property]);
 		}
 	});
 	return {};
