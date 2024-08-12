@@ -591,10 +591,47 @@ ispy.initLight = function() {
 
 };
 
-ispy.initDetector = function() {
+ispy.initControlPanel = function() {
 
     ispy.importDetector();
+    ispy.initSelectionFields();
     
+};
+
+ispy.initSelectionFields = function() {
+	gui_elem = ispy.guiReduced;
+
+    let folder = gui_elem.__folders["Event Selection"];
+	
+	let names = ispy.getSceneObjects();
+	// pt is element 1 in the collection object (inconvinient definition by design)
+	nMuon = 0;
+	nElectron = 0;
+	chargeSign = false;
+	minPt = 0.0;
+
+
+    const row_obj = {
+	"# Muons": nMuon,
+	"# Electrons": nElectron,
+	"Charge Sign": chargeSign,
+	"Min Pt": minPt,
+    };
+
+    Object.keys(row_obj).forEach(function(key) {
+        // add the controller to the folder
+        var cont = folder.add(row_obj, key)
+        if (typeof(row_obj[key]) == "boolean") return;
+        cont.onFinishChange(function(value) {
+            if (value < 0) this.setValue(0);
+        });
+    });
+
+	// add all controllers to the reduced subfolders for convenience
+	folder.__controllers.forEach(function(c) {
+		ispy.subfoldersReduced["Selection"].push(c);
+	});
+
 };
 
 ispy.render = function() {

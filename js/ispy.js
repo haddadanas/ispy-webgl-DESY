@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ispy.init();
     ispy.addGroups();
     ispy.initLight();
-    ispy.initDetector();
+    ispy.initControlPanel();
     ispy.loadWebFiles();
     ispy.run();
 

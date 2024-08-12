@@ -6,6 +6,7 @@ ispy.addGroups = function() {
     ispy.gui.addFolder("Imported");
 
     ispy.guiReduced.addFolder("Detector");
+	ispy.guiReduced.addFolder("Event Selection");
 
 	// create subfolders to access controllers and obejcts easily, since we have a lot of them
     ispy.subfolders.Detector = [];
@@ -14,6 +15,7 @@ ispy.addGroups = function() {
 	ispy.subfoldersReduced.Detector = [];
 	ispy.subfoldersReduced['Controllers'] = [];
 	ispy.subfoldersReduced['Info'] = [];
+	ispy.subfoldersReduced['Selection'] = [];
 
     ispy.data_groups.forEach(function(gr) {
 
@@ -45,18 +47,12 @@ ispy.clearSubfolders = function() {
 	    
     });
 
-	ispy.subfoldersReduced['Controllers'].forEach(function(s) {
-		s.remove();
+	["Controllers", "Info"].forEach(function(g) {
+		ispy.subfoldersReduced[g].forEach(function(s) {
+			s.remove()
+		});
+		ispy.subfoldersReduced[g] = [];
 	});
-
-	ispy.subfoldersReduced['Controllers'] = [];
-    
-	ispy.subfoldersReduced['Info'].forEach(function(s) {
-		s.remove();
-	}
-	);
-
-	ispy.subfoldersReduced['Info'] = [];
 };
 
 ispy.toggle = function(key) {
@@ -504,25 +500,30 @@ ispy.addControllers = function(group) {
 		
 	if (group.includes('Show/Hide')) {
 		folder.add(row_obj, 'Jets').onChange(function() {
-		ispy.views.forEach(v => {
-			jet_obj = ispy.scenes[v].getObjectByName(names['PFJets'])
-			jet_obj.visible = !jet_obj.visible
-		});	
-	});
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				jet_obj = ispy.scenes[v].getObjectByName(names['PFJets']);
+				if (!jet_obj) return;
+				jet_obj.visible = val;
+			});	
+		});
 
-	folder.add(row_obj, 'MET').onChange(function() {
-		ispy.views.forEach(v => {
-			met_obj = ispy.scenes[v].getObjectByName(names['PFMETs'])
-			met_obj.visible = !met_obj.visible
-		});	
-	});
+		folder.add(row_obj, 'MET').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				met_obj = ispy.scenes[v].getObjectByName(names['PFMETs']);
+				met_obj.visible = val;
+			});	
+		});
 
-	// folder.add(row_obj, 'Additional Tracks').onChange(function() {
-	// 	ispy.views.forEach(v => {
-	// 		tracks = ispy.scenes[v].getObjectByName(names['Tracks'])
-	// 		tracks.visible = !tracks.visible
-	// 	});	
-	// });
+		folder.add(row_obj, 'Additional Tracks').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				tracks = ispy.scenes[v].getObjectByName(names['Tracks']);
+				if (!tracks) return;
+				tracks.visible = val;
+			});	
+		});
 
 	}
 
@@ -533,7 +534,7 @@ ispy.addControllers = function(group) {
 
 };
 
-ispy.addInfo = function(group) { // TODO
+ispy.addInfo = function(group) {
 
 	gui_elem = ispy.guiReduced;
 	
@@ -547,7 +548,10 @@ ispy.addInfo = function(group) { // TODO
 	MET: met_pt.toFixed(2) + " GeV",
     };
 
-	folder.add(row_obj, 'MET');
+	folder.add(row_obj, 'MET').onFinishChange(function() {
+		// reset to original value
+		this.setValue(this.initialValue);
+	});
 
 	// add all controllers to the reduced subfolders for convenience
 	folder.__controllers.forEach(function(c) {
@@ -574,8 +578,8 @@ ispy.applySavedSettings = function(settings) {
 	};
 	controllers = ispy.subfoldersReduced["Controllers"];
 	controllers.forEach(function(c) {
-		if (setting = settings[c.property]) {
-			c.setValue(setting);
+		if (c.property in settings) {
+			c.setValue(settings[c.property]);
 		}
 	});
 	return {};
