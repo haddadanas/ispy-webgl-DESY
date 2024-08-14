@@ -520,10 +520,7 @@ ispy.showMass = function() {
 
 };
 
-ispy.displayEventObjectData = function() {
-
-    const key = ispy.intersected.name;
-    
+ispy.getFourVector = function(key, objectUserData) {
     const isMuon = key.includes('Muon');
     const isElectron = key.includes('Electron');
 
@@ -533,7 +530,6 @@ ispy.displayEventObjectData = function() {
 
     }
     
-    const objectUserData = ispy.intersected.userData;
     const type = ispy.current_event.Types[key];
     const eventObjectData = ispy.current_event.Collections[key][objectUserData.originalIndex];
     
@@ -582,7 +578,18 @@ ispy.displayEventObjectData = function() {
     E += pt*pt*Math.cosh(eta)*Math.cosh(eta);
     E = Math.sqrt(E);
 
-    ispy.intersected.four_vector = {'E':E, 'px':px, 'py':py, 'pz':pz};
+    return {'E':E, 'px':px, 'py':py, 'pz':pz, "pt": pt, "index": objectUserData.originalIndex, "ptype": ptype};
+}
+
+ispy.displayEventObjectData = function() {
+
+    const key = ispy.intersected.name;
+    const objectUserData = ispy.intersected.userData;
+
+    let fourVector = ispy.getFourVector(key, objectUserData);
+    let ptype = fourVector.ptype;
+
+    ispy.intersected.four_vector = fourVector;
     ispy.intersected.ptype = ptype;
     
     ispy.selected_objects.set(ispy.intersected.id, ispy.intersected);
