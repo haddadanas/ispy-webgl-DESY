@@ -17,7 +17,7 @@ ispy.getSelectionCuts = function() {
     return cuts
 }
 
-ispy.getLepton = function() {
+ispy.getLeptons = function() {
     objects = ispy.scenes["3D"].getObjectByName("Physics");
     if (!objects) return;
     let names = ispy.getSceneObjects();
@@ -29,7 +29,7 @@ ispy.getLepton = function() {
         leptons[name] = [];
         var lines = objects.getObjectByName(name).children;
         lines.forEach(line => {
-            leptons[name].push(ispy.getFourVector(name, line));
+            leptons[name].push(ispy.getFourVector(name, line.userData));
         });
     });
     leptons["MET"] = ispy.current_event.Collections[names['PFMETs']][0][1];
