@@ -523,8 +523,9 @@ ispy.showMass = function() {
 ispy.getFourVector = function(key, objectUserData) {
     const isMuon = key.includes('Muon');
     const isElectron = key.includes('Electron');
+    const isPhoton = key.includes('Photon');
 
-    if ( ! ( isMuon || isElectron ) ) {
+    if ( ! ( isMuon || isElectron || isPhoton ) ) {
 
 	return;
 
@@ -542,7 +543,11 @@ ispy.getFourVector = function(key, objectUserData) {
 
 	    pt = eventObjectData[t];
 
-	} else if ( type[t][0] === 'eta' ) {
+	} else if ( type[t][0] === 'energy' ) {
+
+        E = eventObjectData[t];
+    
+    } else if ( type[t][0] === 'eta' ) {
 
 	    eta = eventObjectData[t];
 
@@ -557,30 +562,37 @@ ispy.getFourVector = function(key, objectUserData) {
     }
     }
 
+    if (!pt) {
+        pt = E / Math.cosh(eta);
+    }
     let ptype;
 
     px = pt*Math.cos(phi);
     py = pt*Math.sin(phi);
     pz = pt*Math.sinh(eta);
 
-    E = 0;
-
-    if ( isMuon ) {
-
-	E += mMuon2;
-	ptype = 'Muon';
-
+    if (isPhoton) {
+        return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'index': objectUserData.originalIndex, 'ptype': ptype};
     }
 
-    if ( isElectron ) {
+        E = 0;
 
-	E += mElectron2;
-	ptype = 'Electron';
+        if ( isMuon ) {
 
-    }
+        E += mMuon2;
+        ptype = 'Muon';
 
-    E += pt*pt*Math.cosh(eta)*Math.cosh(eta);
-    E = Math.sqrt(E);
+        }
+
+        if ( isElectron ) {
+
+        E += mElectron2;
+        ptype = 'Electron';
+
+        }
+
+        E += pt*pt*Math.cosh(eta)*Math.cosh(eta);
+        E = Math.sqrt(E);
 
     return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'charge': charge, 'index': objectUserData.originalIndex, 'ptype': ptype};
 }

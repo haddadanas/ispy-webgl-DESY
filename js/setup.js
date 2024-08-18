@@ -602,25 +602,31 @@ ispy.initSelectionFields = function() {
 	gui_elem = ispy.guiReduced;
 
     let folder = gui_elem.__folders["Event Selection"];
-	
-	let names = ispy.getSceneObjects();
-	// pt is element 1 in the collection object (inconvinient definition by design)
+	let nMuon, nElectron, nPhoton, chargeSign, minPt;
+
 	nMuon = 0;
 	nElectron = 0;
-	chargeSign = false;
+    nPhoton = 0;
+	chargeSign = "same";
 	minPt = 0.0;
 
 
     const row_obj = {
 	"# Muons": nMuon,
 	"# Electrons": nElectron,
+    "# Photons": nPhoton,
 	"Charge Sign": chargeSign,
-	"Min Pt": minPt,
+	"Lepton Min Pt": minPt,
+    "MET Min Pt": minPt,
     };
 
     Object.keys(row_obj).forEach(function(key) {
         // add the controller to the folder
-        var cont = folder.add(row_obj, key)
+        if (key == "Charge Sign") {
+            var cont = folder.add(row_obj, key, ["same", "opposite"]);
+        } else {
+        var cont = folder.add(row_obj, key);
+        }
         if (typeof(row_obj[key]) == "boolean") return;
         cont.onFinishChange(function(value) {
             if (value < 0) this.setValue(0);
