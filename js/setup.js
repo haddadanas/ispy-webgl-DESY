@@ -604,9 +604,9 @@ ispy.initSelectionFields = function() {
     let folder = gui_elem.__folders["Event Selection"];
 	let nMuon, nElectron, nPhoton, chargeSign, minPt;
 
-	nMuon = 0;
-	nElectron = 0;
-    nPhoton = 0;
+	nMuon = -1;
+	nElectron = -1;
+    nPhoton = -1;
 	chargeSign = "same";
 	minPt = 0.0;
 
@@ -624,12 +624,18 @@ ispy.initSelectionFields = function() {
         // add the controller to the folder
         if (key == "Charge Sign") {
             var cont = folder.add(row_obj, key, ["same", "opposite"]);
+            cont.getValue = function() {
+                result = this.object[this.property];
+                if (result == "same") return 1;
+                return 0;
+            }
+            return;
         } else {
         var cont = folder.add(row_obj, key);
         }
         if (typeof(row_obj[key]) == "boolean") return;
         cont.onFinishChange(function(value) {
-            if (value < 0) this.setValue(0);
+            if (value < -1) this.setValue(-1);
         });
     });
 
