@@ -80,8 +80,8 @@ ispy.getParticles = function() {
     var particles = {};
     // part_names = part_names.filter(name => name);
     part_names.forEach(name => {
-        if (!name) return;
         collectionName = names[name];
+        if (!collectionName) return;
         particles[name] = [];
         var lines = objects.getObjectByName(collectionName).children;
         lines.forEach(line => {
