@@ -609,6 +609,10 @@ ispy.initSelectionFields = function() {
     nPhoton = -1;
 	chargeSign = "same";
 	minPt = 0.0;
+    test = function() {
+        let text = ispy.checkIfPassing();
+        alert(text);
+    }
 
 
     const row_obj = {
@@ -618,6 +622,7 @@ ispy.initSelectionFields = function() {
 	"Charge Sign": chargeSign,
 	"Lepton Min Pt": minPt,
     "MET Min Pt": minPt,
+    "check current": test
     };
 
     Object.keys(row_obj).forEach(function(key) {
@@ -633,7 +638,8 @@ ispy.initSelectionFields = function() {
         } else {
         var cont = folder.add(row_obj, key);
         }
-        if (typeof(row_obj[key]) == "boolean") return;
+
+        if (typeof(row_obj[key]) == "boolean" || key == "check current") return;
         cont.onFinishChange(function(value) {
             if (value < -1) this.setValue(-1);
         });

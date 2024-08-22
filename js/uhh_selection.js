@@ -50,8 +50,10 @@ ispy.checkIfPassing = function() {
             }
         }
     }
+    html += (pass ? "passes" : "does not pass") + " the selection!"
+    document.getElementById('analysis-results').innerHTML = html;
 
-    document.getElementById('analysis-results').innerHTML = html + (pass ? "passes" : "does not pass") + " the selection!";
+    return html;
 }
 
 ispy.getSelectionCuts = function() {
