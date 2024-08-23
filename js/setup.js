@@ -610,7 +610,7 @@ ispy.initSelectionFields = function() {
 	chargeSign = "same";
 	minPt = 0.0;
     test = function() {
-        let text = ispy.checkIfPassing();
+        let text = ispy.getSelectionMessage();
         alert(text);
     }
 
@@ -639,7 +639,7 @@ ispy.initSelectionFields = function() {
         var cont = folder.add(row_obj, key);
         }
 
-        if (typeof(row_obj[key]) == "boolean" || key == "check current") return;
+        if (typeof(row_obj[key]) == "boolean" || typeof(row_obj[key]) == "function") return;
         cont.onFinishChange(function(value) {
             if (value < -1) this.setValue(-1);
         });

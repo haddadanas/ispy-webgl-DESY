@@ -1,9 +1,31 @@
-ispy.checkIfPassing = function() {
-    if (!ispy.current_event) {
-        document.getElementById('analysis-results').innerHTML = "No event file is loaded!";
-        return;
+ispy.getSelectionMessage = function() {
+    var pass = ispy.checkIfPassing();
+    if (pass == undefined) {
+        return "No event file is loaded!";
     }
     var html = "This Event ";
+    html += (pass ? "passes" : "does not pass") + " the selection!";
+    return html;
+}
+
+ispy.getSelectionResults = function() {
+    var pass = ispy.checkIfPassing();
+    if (pass == undefined) {
+        document.getElementById('analysis-results').innerHTML = "No event file is loaded!";
+        document.getElementById('mt_hist').src = "";
+        return;
+    }
+    document.getElementById('analysis-results').innerHTML = "Something should be here!";
+    document.getElementById('mt_hist').src = "./graphics/console3.png";
+    // TODO
+    return;
+}
+
+ispy.checkIfPassing = function() {
+    if (!ispy.current_event) {
+        return;
+    }
+
     var pass = true;
 
     var cuts = ispy.getSelectionCuts();
@@ -50,10 +72,7 @@ ispy.checkIfPassing = function() {
             }
         }
     }
-    html += (pass ? "passes" : "does not pass") + " the selection!"
-    document.getElementById('analysis-results').innerHTML = html;
-
-    return html;
+    return pass;
 }
 
 ispy.getSelectionCuts = function() {
