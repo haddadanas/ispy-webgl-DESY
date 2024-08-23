@@ -2,6 +2,7 @@ ispy.ig_data = null;
 ispy.ievent = 0;
 ispy.isGeometry = false;
 ispy.loaded_local = false;
+ispy.file_events_summary = null;
 
 ispy.openDialog = function(id) {
 
@@ -128,7 +129,7 @@ ispy.loadEvent = function() {
 	alert(err);
     
     }
-
+	ispy.file_events_summary = ispy.getEventsSummary(event);
     //document.getElementById('loading').style.display = 'none';
     $("#loading").modal("hide");
 

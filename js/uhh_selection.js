@@ -112,3 +112,14 @@ ispy.getParticles = function() {
     particles["MET"] = ispy.current_event.Collections[names['PFMETs']][0][1];
     return particles;
 }
+
+ispy.getEventsSummary = function(event_json) {
+    let part_names = ["TrackerMuons", "GsfElectrons", "Photons", "PFMETs"];
+    let keys = Object.keys(event_json.Collections)
+    map = part_names.map(name => {
+        keys.filter(k => k.includes(name)).reduce((x, y) => x > y ? x: y);
+    }
+    );
+    var s = "";
+    return;
+}
