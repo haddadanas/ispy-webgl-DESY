@@ -610,36 +610,52 @@ ispy.initSelectionFields = function() {
 	chargeSign = "same";
 	minPt = 0.0;
     test = function() {
-        let text = analysis.getSelectionMessage();
-        alert(text);
+        let [text, symbol] = analysis.getSelectionMessage();
+        swal("Selection Results", text, symbol);
     }
 
 
     const row_obj = {
-	"# Muons": nMuon,
-	"# Electrons": nElectron,
-    "# Photons": nPhoton,
-	"Charge Sign": chargeSign,
-	"Lepton Min Pt": minPt,
-    "MET Min Pt": minPt,
+	"TrackerMuons": nMuon,
+	"GsfElectrons": nElectron,
+    "Photons": nPhoton,
+	"charge": chargeSign,
+	"pt": minPt,
+    "PFMETs": minPt,
     "check current": test
     };
 
+    var naming_map = {
+        "TrackerMuons": "# &mu;",
+        "GsfElectrons": "# e",
+        "Photons": "# &gamma;",
+        "charge": "Charge Sign",
+        "pt": "Min p<sub>T,&#8467;</sub>",
+        "PFMETs": "Min <span class='strikethrough'>p<sub>T</sub></span> (MET)",
+        "check current": "Check Current"
+    };
+
     Object.keys(row_obj).forEach(function(key) {
+        elem_name = naming_map[key];
+
         // add the controller to the folder
-        if (key == "Charge Sign") {
-            var cont = folder.add(row_obj, key, ["same", "opposite"]);
+        if (key == "charge") {
+            var cont = folder.add(row_obj, key, ["same", "opposite"]).name(elem_name);
             cont.getValue = function() {
                 result = this.object[this.property];
                 if (result == "same") return 1;
                 return 0;
             }
             return;
-        } else {
-        var cont = folder.add(row_obj, key);
         }
 
-        if (typeof(row_obj[key]) == "boolean" || typeof(row_obj[key]) == "function") return;
+        var cont = folder.add(row_obj, key).name(elem_name);
+
+        if (typeof(row_obj[key]) == "boolean") return;
+        if (typeof(row_obj[key]) == "function") {
+            cont.domElement.previousSibling.style.width = "100%";
+            cont.domElement.previousSibling.style.textAlign = "center";
+        }
         cont.onFinishChange(function(value) {
             if (value < -1) this.setValue(-1);
         });
