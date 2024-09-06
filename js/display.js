@@ -291,6 +291,8 @@ ispy.onMouseDown = function(e) {
 
 	}
 
+    ispy.subfoldersReduced['Info'][1].setValue(ispy.selected_objects.size);
+
     }
 
 };
