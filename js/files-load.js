@@ -2,7 +2,6 @@ ispy.ig_data = null;
 ispy.ievent = 0;
 ispy.isGeometry = false;
 ispy.loaded_local = false;
-ispy.file_events_summary = null;
 
 ispy.openDialog = function(id) {
 
@@ -129,8 +128,7 @@ ispy.loadEvent = function() {
 	alert(err);
     
     }
-	ispy.file_events_summary = ispy.getEventsSummary(event);
-    //document.getElementById('loading').style.display = 'none';
+	//document.getElementById('loading').style.display = 'none';
     $("#loading").modal("hide");
 
     if ( ispy.isGeometry ) {
@@ -302,7 +300,8 @@ ispy.loadDroppedFile = function(file) {
 	ispy.event_index = 0;
 	ispy.updateEventList();
 	ispy.ig_data = zip;
-	
+
+	analysis.buildFileSummary();
 	ispy.loadEvent();
 
 	//document.getElementById('loading').style.display = 'none';

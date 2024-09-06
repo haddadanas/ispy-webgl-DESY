@@ -610,7 +610,7 @@ ispy.initSelectionFields = function() {
 	chargeSign = "same";
 	minPt = 0.0;
     test = function() {
-        let text = ispy.getSelectionMessage();
+        let text = analysis.getSelectionMessage();
         alert(text);
     }
 

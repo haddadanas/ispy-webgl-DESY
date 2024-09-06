@@ -21,3 +21,7 @@ ispy.SHAPE = 9;
 ispy.TEXT = 10;
 ispy.BUFFERBOX = 11;
 ispy.STACKEDTOWER = 12;
+
+// Define some collection for the event data analysis
+var analysis = analysis || {};
+analysis.file_events_summary = null;

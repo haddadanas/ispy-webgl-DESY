@@ -520,7 +520,29 @@ ispy.showMass = function() {
 
 };
 
-ispy.getFourVector = function(key, objectUserData) {
+ispy.getMetInformation = function(type, eventObjectData) {
+    
+        let pt, phi;
+    
+        for ( var t in type ) {
+    
+        if ( type[t][0] === 'pt' ) {
+    
+            pt = eventObjectData[t];
+    
+        } else if ( type[t][0] === 'phi' ) {
+    
+            phi = eventObjectData[t];
+    
+        }
+    
+        }
+    
+        return {'pt': pt, 'phi': phi};
+    
+    }
+
+ispy.getFourVector = function(key, type, eventObjectData) {
     const isMuon = key.includes('Muon');
     const isElectron = key.includes('Electron');
     const isPhoton = key.includes('Photon');
@@ -530,9 +552,6 @@ ispy.getFourVector = function(key, objectUserData) {
 	return;
 
     }
-
-    const type = ispy.current_event.Types[key];
-    const eventObjectData = ispy.current_event.Collections[key][objectUserData.originalIndex];
 
     let pt, eta, phi, charge;
     let E, px, py, pz;
@@ -572,7 +591,7 @@ ispy.getFourVector = function(key, objectUserData) {
     pz = pt*Math.sinh(eta);
 
     if (isPhoton) {
-        return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'index': objectUserData.originalIndex, 'ptype': ptype};
+        return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'ptype': ptype};
     }
 
         E = 0;
@@ -594,7 +613,17 @@ ispy.getFourVector = function(key, objectUserData) {
         E += pt*pt*Math.cosh(eta)*Math.cosh(eta);
         E = Math.sqrt(E);
 
-    return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'charge': charge, 'index': objectUserData.originalIndex, 'ptype': ptype};
+    return {'E':E, 'px':px, 'py':py, 'pz':pz, 'pt': pt, 'charge': charge, 'ptype': ptype};
+}
+
+ispy.getFourVectorByObjectIndex = function(key, objectUserData) {
+    const type = ispy.current_event.Types[key];
+    const eventObjectData = ispy.current_event.Collections[key][objectUserData.originalIndex];
+    
+    let result = ispy.getFourVector(key, type, eventObjectData);
+    result['index'] = objectUserData.originalIndex;
+
+    return result;
 }
 
 ispy.displayEventObjectData = function() {
@@ -602,7 +631,7 @@ ispy.displayEventObjectData = function() {
     const key = ispy.intersected.name;
     const objectUserData = ispy.intersected.userData;
 
-    let fourVector = ispy.getFourVector(key, objectUserData);
+    let fourVector = ispy.getFourVectorByObjectIndex(key, objectUserData);
     let ptype = fourVector.ptype;
 
     ispy.intersected.four_vector = fourVector;
