@@ -1,11 +1,12 @@
 analysis.getSelectionMessage = function() {
-    var pass = analysis.checkIfPassing();
+    var pass = analysis.checkIfEventPassing(ispy.event_index);
     if (pass == undefined) {
-        return "No event file is loaded!";
+        return ["No event file is loaded!", "warning"];
     }
     var html = "This Event ";
     html += (pass ? "passes" : "does not pass") + " the selection!";
-    return html;
+    symbol = pass ? "success" : "error";
+    return [html, symbol];
 }
 
 analysis.getSelectionResults = function() {
@@ -21,7 +22,7 @@ analysis.getSelectionResults = function() {
     return;
 }
 
-analysis.checkIfPassing = function() {
+analysis.checkIfEventPassing = function(event_index) {
     if (!ispy.current_event) {
         return;
     }
@@ -92,7 +93,7 @@ analysis.getSelectionCuts = function() {
     return cuts
 }
 
-analysis.getParticles = function() {
+analysis.getParticles = function() {  // SHOULD BE REMOVED!!!
     let objects = ispy.scenes["3D"].getObjectByName("Physics");
     if (!objects) return;
     let names = ispy.getSceneObjects();
@@ -157,19 +158,20 @@ analysis.getEventsSummary = function(event_json) {
     let part_names = ["TrackerMuons", "GsfElectrons", "Photons", "PFMETs"];
     let keys = Object.keys(event_json.Collections)
     var map = part_names.map(name => keys.filter(k => k.includes(name)).reduce((x, y) => x > y ? x: y));
-    var s = new Map();
+    var summary = new Map();
     map.forEach((collec) => {
 
-        type = event_json.Types[collec];
+        let type = event_json.Types[collec];
+        let key = collec.replace(/_V\d/g, '');
         if (collec.includes("MET")) {
-            s.set(collec, ispy.getMetInformation(type, event_json.Collections[collec][0]));
+            summary.set(key, ispy.getMetInformation(type, event_json.Collections[collec][0]));
             return;
         }
         let tmp = new Array();
         event_json.Collections[collec].forEach((part) => {
             tmp.push(ispy.getFourVector(collec, type, part));
         });
-        s.set(collec, tmp);
+        summary.set(key, tmp);
     })
-    return s;
+    return summary;
 }
