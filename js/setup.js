@@ -611,7 +611,7 @@ ispy.initSelectionFields = function() {
 	minPt = 0.0;
     test = function() {
         let [text, symbol] = analysis.getSelectionMessage();
-        swal("Selection Results", text, symbol);
+        swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});
     }
 
 
