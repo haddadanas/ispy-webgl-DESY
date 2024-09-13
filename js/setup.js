@@ -607,10 +607,10 @@ ispy.initSelectionFields = function() {
 	nMuon = -1;
 	nElectron = -1;
     nPhoton = -1;
-	chargeSign = "same";
+	chargeSign = "";
 	minPt = 0.0;
     test = function() {
-        let [text, symbol] = analysis.getSelectionMessage();
+        let [text, symbol] = analysis.getCurrentSelectionMessage();
         swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});
     }
 
@@ -640,11 +640,12 @@ ispy.initSelectionFields = function() {
 
         // add the controller to the folder
         if (key == "charge") {
-            var cont = folder.add(row_obj, key, ["same", "opposite"]).name(elem_name);
+            var cont = folder.add(row_obj, key, ["", "same", "opposite"]).name(elem_name);
             cont.getValue = function() {
                 result = this.object[this.property];
+                if (result == "opposite") return 0;
                 if (result == "same") return 1;
-                return 0;
+                return -1;
             }
             return;
         }

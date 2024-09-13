@@ -1,4 +1,4 @@
-analysis.getSelectionMessage = function() {
+analysis.getCurrentSelectionMessage = function() {
     var pass = analysis.checkIfEventPassing(ispy.event_index);
     if (pass == undefined) {
         return ["No event file is loaded!", "warning"];
@@ -28,89 +28,69 @@ analysis.checkIfEventPassing = function(event_index) {
     }
 
     var pass = true;
-
     var cuts = analysis.getSelectionCuts();
-    var particles = analysis.getParticles();
+    var particles = analysis.file_events_summary.get(event_index.toString());
 
-    for (var name in cuts) {
-        if (cuts[name] == -1) continue;
-        if (name == "MET") {
-            if (particles[name] < cuts[name]) {
-                pass = false;
-                break;
-            }
-        } else if (name == "charge") {
-            let chargeSum = 0;
-            particles["TrackerMuons"].forEach(muon => {
-                chargeSum += muon[name];
-            });
-            particles["GsfElectrons"].forEach(electron => {
-                chargeSum += electron[name];
-            });
-            chargeSum = Math.min(1, Math.abs(chargeSum));
-            if (chargeSum != cuts[name]) {
-                pass = false;
-                break;
-            }
-        } else if (name == "pt") {
-            particles["TrackerMuons"].forEach(muon => {
-                if (muon[name] < cuts[name]) {
-                    pass = false;
-                    return;
-                }
-            });
-            particles["GsfElectrons"].forEach(electron => {
-                if (electron[name] < cuts[name]) {
-                    pass = false;
-                    return;
-                }
-            });
-            if (pass == false) break;
-        } else {
-            if (particles[name].length != cuts[name]) {
-                pass = false;
-                break;
-            }
+    for (let [name, part] of particles) {
+        if (name == "PFMETs") {
+            pass &&= checkMET(part, cuts[name]);
+            break;
         }
-    }
+        if (cuts[name] == -1) continue;
+        if (name == "TrackerMuons" || name == "GsfElectrons") {
+            pass &&= checkCharge(part, cuts["charge"]);
+            if (!pass) break;
+            part = getPtPassingLeptons(part, cuts["pt"]);
+        }
+        if (part.length != cuts[name]) {
+            pass &&= false;
+            break;
+        }
+    };
     return pass;
 }
 
+function checkMET(met, cut) {
+    return met["pt"] >= cut;
+}
+
+function checkCharge(leptons, cut) {
+    if (cut == -1) return true;
+    let chargeSum = 0;
+    leptons.forEach(lepton => {
+        chargeSum += lepton["charge"];
+    });
+    chargeSum = Math.min(1, Math.abs(chargeSum));
+    return chargeSum == cut;
+}
+
+function getPtPassingLeptons(leptons, cut) {
+    return leptons.filter(lepton => lepton["pt"] >= cut)
+}
+
+
 analysis.getSelectionCuts = function() {
     var cuts = {};
-    var keyMapping = {
-        "# Muons": "TrackerMuons",
-        "# Electrons": "GsfElectrons",
-        "# Photons": "Photons",
-        "Charge Sign": "charge",
-        "Lepton Min Pt": "pt",
-        "MET Min Pt": "MET",
-    }
     ispy.subfoldersReduced["Selection"].forEach(e => {
-        if (! (newKey = keyMapping[e.property])) return;
-        cuts[newKey] = e.getValue();
+        if (typeof(e.getValue()) == "function") return;
+        cuts[e.property] = e.getValue();
     });
     return cuts
 }
 
-analysis.getParticles = function() {  // SHOULD BE REMOVED!!!
-    let objects = ispy.scenes["3D"].getObjectByName("Physics");
-    if (!objects) return;
-    let names = ispy.getSceneObjects();
-    let part_names = ["TrackerMuons", "GsfElectrons", "Photons"];
-    var particles = {};
-    // part_names = part_names.filter(name => name);
-    part_names.forEach(name => {
-        collectionName = names[name];
-        if (!collectionName) return;
-        particles[name] = [];
-        var lines = objects.getObjectByName(collectionName).children;
-        lines.forEach(line => {
-            particles[name].push(ispy.getFourVectorByObjectIndex(collectionName, line.userData));
-        });
-    });
-    particles["MET"] = ispy.current_event.Collections[names['PFMETs']][0][1];
-    return particles;
+
+analysis.getPassingEvents = function() {
+    if (!ispy.current_event) {
+        return;
+    }
+    var passing_events = [];
+    for (let index of analysis.file_events_summary.keys()) {
+        if (analysis.checkIfEventPassing(index)) {
+            passing_events.push(index);
+        }
+    }
+
+    return passing_events;
 }
 
 
