@@ -1,5 +1,5 @@
 analysis.getCurrentSelectionMessage = function() {
-    var pass = analysis.checkIfEventPassing(ispy.event_index);
+    var pass = checkIfCurrentEventPassing();
     if (pass == undefined) {
         return ["No event file is loaded!", "warning"];
     }
@@ -10,26 +10,51 @@ analysis.getCurrentSelectionMessage = function() {
 }
 
 analysis.getSelectionResults = function() {
-    var pass = analysis.checkIfPassing();
-    if (pass == undefined) {
-        document.getElementById('analysis-results').innerHTML = "No event file is loaded!";
-        document.getElementById('mt_hist').src = "";
+    if (ispy.file_events_summary == undefined) {
+        document.getElementById('event-statistics').innerHTML = "No event file is loaded!";
         return;
     }
-    document.getElementById('analysis-results').innerHTML = "Something should be here!";
-    document.getElementById('mt_hist').src = "./graphics/console3.png";
+    document.getElementById('event-statistics').innerHTML = "Something should be here!";
+    Plotly.newPlot("mt-hist", [{ y: [1, 2, 3] }])
+    Plotly.newPlot("m-hist", [{ y: [1, 2, 3] }])
     // TODO
     return;
 }
 
-analysis.checkIfEventPassing = function(event_index) {
+analysis.getSelectionCuts = function() {
+    var cuts = {};
+    ispy.subfoldersReduced["Selection"].forEach(e => {
+        if (typeof(e.getValue()) == "function") return;
+        cuts[e.property] = e.getValue();
+    });
+    return cuts
+}
+
+// Calculate the invariant mass of a list of particles
+function calculateInvariantMass(particles) { // TODO
+    if (particles.length < 2) {
+        return -1;
+    }
+    var sum = particles.reduce((acc, part) => {
+        return acc.add(part);
+    });
+    return sum.mag();
+    
+}
+
+// Check if an event is passing the selection
+function checkIfCurrentEventPassing() {
+    return checkIfEventPassing(ispy.event_index);
+}
+
+function checkIfEventPassing(event_index) {
     if (!ispy.current_event) {
         return;
     }
 
     var pass = true;
     var cuts = analysis.getSelectionCuts();
-    var particles = analysis.file_events_summary.get(event_index.toString());
+    var particles = analysis.file_events_summary.get(String(event_index));
 
     for (let [name, part] of particles) {
         if (name == "PFMETs") {
@@ -50,6 +75,7 @@ analysis.checkIfEventPassing = function(event_index) {
     return pass;
 }
 
+// Helper functions to check the selection
 function checkMET(met, cut) {
     return met["pt"] >= cut;
 }
@@ -68,24 +94,14 @@ function getPtPassingLeptons(leptons, cut) {
     return leptons.filter(lepton => lepton["pt"] >= cut)
 }
 
-
-analysis.getSelectionCuts = function() {
-    var cuts = {};
-    ispy.subfoldersReduced["Selection"].forEach(e => {
-        if (typeof(e.getValue()) == "function") return;
-        cuts[e.property] = e.getValue();
-    });
-    return cuts
-}
-
-
+// Get the passing events in the current file
 analysis.getPassingEvents = function() {
     if (!ispy.current_event) {
         return;
     }
     var passing_events = [];
     for (let index of analysis.file_events_summary.keys()) {
-        if (analysis.checkIfEventPassing(index)) {
+        if (checkIfEventPassing(index)) {
             passing_events.push(index);
         }
     }
@@ -93,7 +109,7 @@ analysis.getPassingEvents = function() {
     return passing_events;
 }
 
-
+// Get the needed information of all events in the current file
 analysis.buildFileSummary = function() {
 
     let event;
@@ -106,7 +122,7 @@ analysis.buildFileSummary = function() {
     // get the event data
     ispy.event_list.forEach((event_path, event_index) => {
         event = JSON.parse(ispy.cleanupData(ispy.ig_data.file(event_path).asText()));
-        event_summary.set(event_index.toString(), analysis.getEventsSummary(event));
+        event_summary.set(event_index.toString(), getEventsSummary(event));
     }
     )
 
@@ -132,9 +148,7 @@ analysis.buildFileSummary = function() {
 
 };
 
-
-
-analysis.getEventsSummary = function(event_json) {
+function getEventsSummary(event_json) {
     let part_names = ["TrackerMuons", "GsfElectrons", "Photons", "PFMETs"];
     let keys = Object.keys(event_json.Collections)
     var map = part_names.map(name => keys.filter(k => k.includes(name)).reduce((x, y) => x > y ? x: y));

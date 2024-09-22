@@ -17,6 +17,7 @@
   <script src="js/lib/stats.min.js"></script>
   <script src="js/lib/dat.gui.min.js"></script>
   <script src="js/lib/sweetalert.min.js"></script>
+  <script src="js/lib/plotly-2.35.2.min.js"></script>
   
   <script src="js/lib/three.js"></script>
   <script src="js/lib/tween.min.js"></script>
@@ -449,8 +450,37 @@ piwikTracker.enableLinkTracking();
         <p>
           Still in development ...
         </p>
-        <div id="analysis-results"></div>
-        <img id="mt_hist" width="100%" src=""/>
+
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#statistics-tab" aria-controls="statistics-tab" role="tab" data-toggle="tab">Statistics</a></li>
+            <li role="presentation"><a href="#m-tab" aria-controls="m-tab" role="tab" data-toggle="tab">Invariant Mass (visible)</a></li>
+            <li role="presentation" class="active"><a href="#mt-tab" aria-controls="mt-tab" role="tab" data-toggle="tab">Transverse Mass</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="statistics-tab">
+              <p>
+                Show display statistics:
+              </p>
+              <div id="event-statistics"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="m-tab">
+              <p>
+                Still in development ...
+              </p>
+              <div id="m-plot"></div>
+              <span id="m-hist" style="display: block; width: 100%; background-image: url('');"></span>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="mt-tab">
+              <p>
+                Still in development ...
+              </p>
+              <div id="mt-plot"></div>
+              <span id="mt-hist" style="display: block; width: 100%; background-image: url('');"></span>
+            </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -493,7 +523,10 @@ piwikTracker.enableLinkTracking();
 	  <a href="https://github.com/msaunby" target="_blank">M. Saunby</a>
 	</p>
         <p>Reference: <a target="_blank" href="https://doi.org/10.1088/1742-6596/898/7/072030">T McCauley 2017 J. Phys.: Conf. Ser. 898 072030</a></p>
-        <p>This application uses <a target="_blank" href="http://threejs.org/">three.js</a> <span id="threejs"></span></p>
+        <p>This application uses:</p>
+          <ul><a target="_blank" href="http://threejs.org/">three.js</a> <span id="threejs"></span></ul>
+          <ul><a target="_blank" href="https://sweetalert.js.org/">sweetalert.js</a> <span id="sweetalert"></span></ul>
+          <ul><a target="_blank" href="https://plotly.com/javascript/">plotly.js</a> <span id="plotly"></span></ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

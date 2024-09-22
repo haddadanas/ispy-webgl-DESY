@@ -536,6 +536,9 @@ ispy.init = function() {
 
     document.getElementById('version').innerHTML = ispy.version;
     document.getElementById('threejs').innerHTML = "r"+THREE.REVISION;
+    document.getElementById('sweetalert').innerHTML = "2.1.0";
+    document.getElementById('plotly').innerHTML = Plotly.version;
+    
     
     window.addEventListener('resize', ispy.onWindowResize, false);
 
