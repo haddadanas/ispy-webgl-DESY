@@ -535,7 +535,7 @@ ispy.getMetInformation = function(type, eventObjectData) {
     
         } else if ( type[t][0] === 'phi' ) {
     
-            phi = eventObjectData[t];  # TODO can be removed
+            phi = eventObjectData[t];  // TODO can be removed
     
         } else if (type[t][0] === 'px') {
 
@@ -553,7 +553,7 @@ ispy.getMetInformation = function(type, eventObjectData) {
     
         }
     
-        return [{'pt': pt, 'px': px, 'py': py, 'pz':pz}];
+        return {'pt': pt, 'px': px, 'py': py, 'pz':pz, 'phi': phi};
     
     }
 

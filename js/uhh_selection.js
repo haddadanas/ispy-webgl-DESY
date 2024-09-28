@@ -10,7 +10,7 @@ analysis.getCurrentSelectionMessage = function() {
 }
 
 analysis.getSelectionResults = function() {
-    if (ispy.file_events_summary == undefined) {
+    if (analysis.file_events_summary == undefined) {
         document.getElementById('event-statistics').innerHTML = "No event file is loaded!";
         return;
     }
@@ -31,9 +31,9 @@ analysis.getSelectionCuts = function() {
 }
 
 
-function getSelectionParticles() {
+function getSelectionParticles(event_index) {
     var results = new Map();
-    let summary = ispy.file_events_summary;
+    let summary = analysis.file_events_summary.get(String(event_index));
     selection = analysis.getSelectionCuts();
     selection = Object.keys(selection).filter(sel => {
         if (["charge", "pt"].includes(sel)) return false;
@@ -42,7 +42,7 @@ function getSelectionParticles() {
     });
     selection.forEach(key => {
         if (summary.has(key)) {
-            results.set(key, summary.has(key))
+            results.set(key, summary.get(key))
         }
     });
     return results;
