@@ -611,7 +611,7 @@ ispy.initSelectionFields = function() {
 	nElectron = -1;
     nPhoton = -1;
 	chargeSign = "";
-	minPt = 0.0;
+	minPt = -1.0;
     test = function() {
         let [text, symbol] = analysis.getCurrentSelectionMessage();
         swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});

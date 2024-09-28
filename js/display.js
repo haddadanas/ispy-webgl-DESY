@@ -525,6 +525,7 @@ ispy.showMass = function() {
 ispy.getMetInformation = function(type, eventObjectData) {
     
         let pt, phi;
+        let px, py, pz;
     
         for ( var t in type ) {
     
@@ -534,13 +535,25 @@ ispy.getMetInformation = function(type, eventObjectData) {
     
         } else if ( type[t][0] === 'phi' ) {
     
-            phi = eventObjectData[t];
+            phi = eventObjectData[t];  # TODO can be removed
     
+        } else if (type[t][0] === 'px') {
+
+            px = eventObjectData[t];
+
+        } else if (type[t][0] === 'py') {
+
+            py = eventObjectData[t];
+            
+        } else if (type[t][0] === 'pz') {
+
+            pz = eventObjectData[t];
+            
         }
     
         }
     
-        return {'pt': pt, 'phi': phi};
+        return [{'pt': pt, 'px': px, 'py': py, 'pz':pz}];
     
     }
 

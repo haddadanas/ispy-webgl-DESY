@@ -30,16 +30,48 @@ analysis.getSelectionCuts = function() {
     return cuts
 }
 
+
+function getSelectionParticles() {
+    var results = new Map();
+    let summary = ispy.file_events_summary;
+    selection = analysis.getSelectionCuts();
+    selection = Object.keys(selection).filter(sel => {
+        if (["charge", "pt"].includes(sel)) return false;
+        if (selection[sel] < 0) return false;
+        return true;
+    });
+    selection.forEach(key => {
+        if (summary.has(key)) {
+            results.set(key, summary.has(key))
+        }
+    });
+    return results;
+}
+
+
 // Calculate the invariant mass of a list of particles
 function calculateInvariantMass(particles) { // TODO
-    if (particles.length < 2) {
+    if (particles.length < 1) {
         return -1;
     }
-    var sum = particles.reduce((acc, part) => {
-        return acc.add(part);
+    let sumPx, sumPy, sumPz, sumE;
+    sumPx = sumPy = sumPz = sumE = 0;
+
+    particles.forEach((group, key) => {
+        if (key == "PFMETs") return;
+        group.forEach((val) => {
+            sumPx += val.px;
+            sumPy += val.py;
+            sumPz += val.pz;
+            sumE += val.E;
+        });
     });
-    return sum.mag();
+
+    m = sumE*sumE;
+    m -= (sumPx*sumPx + sumPy*sumPy + sumPz*sumPz);
+    m = Math.sqrt(m);
     
+    return m;
 }
 
 // Check if an event is passing the selection
