@@ -62,62 +62,6 @@ function getSelectionParticles(event_index) {
     return results;
 }
 
-
-function sumFourVectors(particles) {
-    if (particles.length < 1) {
-        return -1;
-    }
-    let sumPx, sumPy, sumPz, sumE;
-    sumPx = sumPy = sumPz = sumE = 0;
-
-    particles.forEach((group, key) => {
-        group.forEach((val) => {
-            sumPx += val.px;
-            sumPy += val.py;
-            sumPz += val.pz;
-            sumE += val.E;
-        });
-    });
-
-    return {E: sumE, px: sumPx, py: sumPy, pz: sumPz};
-}
-
-
-// Calculate the invariant mass of a list of particles
-function getInvariantMass(particles) { // TODO
-
-    let sumVector = sumFourVectors(particles);
-    let sumPx, sumPy, sumPz, sumE;
-    sumPx = sumVector.px;
-    sumPy = sumVector.py;
-    sumPz = sumVector.pz;
-    sumE = sumVector.E;
-
-    m = sumE*sumE;
-    m -= (sumPx*sumPx + sumPy*sumPy + sumPz*sumPz);
-    m = Math.sqrt(m);
-    
-    return m;
-}
-
-// Calculate the transverse mass of a list of particles
-function getTransverseMass(particles) { // TODO
-
-    let m = 0;
-    let sumVector = sumFourVectors(particles);
-    let m1 = getInvariantMass(sumVector);
-
-    let met = analysis.file_events_summary.get(String(ispy.event_index)).get("PFMETs");
-    let metE = met.px * met.px + met.py * met.py;
-
-    m = m1*m1;
-    m += 2*(metE*sumVector.E - sumVector.px*met.px - sumVector.py*met.py);
-    m = Math.sqrt(m);
-
-    return m;
-}
-
-
 function checkIfEventPassing(event_index=-1) {
     if (!ispy.current_event) {
         return;
@@ -183,7 +127,9 @@ analysis.getPassingEvents = function() {
     return passing_events;
 }
 
+//
 // Get the needed information of all events in the current file
+//
 analysis.buildFileSummary = function() {
 
     let event;
@@ -242,4 +188,73 @@ function getEventsSummary(event_json) {
         summary.set(key, tmp);
     })
     return summary;
+}
+
+//
+// Helper functions for the selection
+//
+
+function sumFourVectors(particles) {
+    if (particles.length < 1) {
+        return -1;
+    }
+    let sumPx, sumPy, sumPz, sumE;
+    sumPx = sumPy = sumPz = sumE = 0;
+
+    particles.forEach((group, key) => {
+        group.forEach((val) => {
+            sumPx += val.px;
+            sumPy += val.py;
+            sumPz += val.pz;
+            sumE += val.E;
+        });
+    });
+
+    return {E: sumE, px: sumPx, py: sumPy, pz: sumPz};
+}
+
+
+// Calculate the invariant mass of a list of particles
+function getInvariantMass(particles) { // TODO
+
+    let sumVector = sumFourVectors(particles);
+    let sumPx, sumPy, sumPz, sumE;
+    sumPx = sumVector.px;
+    sumPy = sumVector.py;
+    sumPz = sumVector.pz;
+    sumE = sumVector.E;
+
+    m = sumE*sumE;
+    m -= (sumPx*sumPx + sumPy*sumPy + sumPz*sumPz);
+    m = Math.sqrt(m);
+    
+    return m;
+}
+
+// Calculate the transverse mass of a list of particles
+function getTransverseMass(particles) { // TODO
+
+    let m = 0;
+    let sumVector = sumFourVectors(particles);
+    let m1 = getInvariantMass(sumVector);
+
+    let met = analysis.file_events_summary.get(String(ispy.event_index)).get("PFMETs");
+    let metE = met.px * met.px + met.py * met.py;
+
+    m = m1*m1;
+    m += 2*(metE*sumVector.E - sumVector.px*met.px - sumVector.py*met.py);
+    m = Math.sqrt(m);
+
+    return m;
+}
+
+function createHistogram(array, start, end, bins) {
+    // Histogram the array to the range `start` to `end` with `bins` bins
+    var hist = new Array(bins).fill(0);
+    var binWidth = (end - start) / bins;
+    array.forEach((val) => {
+        let bin = Math.floor(val/binWidth);
+        hist[bin]++;
+    });
+    return hist;    
 }
