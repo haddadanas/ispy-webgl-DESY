@@ -1,5 +1,5 @@
 analysis.getCurrentSelectionMessage = function() {
-    var pass = checkIfCurrentEventPassing();
+    var pass = checkIfEventPassing();
     if (pass == undefined) {
         return ["No event file is loaded!", "warning"];
     }
@@ -31,26 +31,39 @@ analysis.getSelectionCuts = function() {
 }
 
 
+function getMassesArray() {
+    var masses = [];
+    var massesT = [];
+    particles = analysis.getPassingEvents().map(i => {
+        return getSelectionParticles(i);
+    });
+    for (let value of particles) {
+        masses.push(getInvariantMass(value));
+        massesT.push(getTransverseMass(value));
+    }
+    return masses;
+}
+
+
 function getSelectionParticles(event_index) {
     var results = new Map();
     let summary = analysis.file_events_summary.get(String(event_index));
     selection = analysis.getSelectionCuts();
     selection = Object.keys(selection).filter(sel => {
-        if (["charge", "pt"].includes(sel)) return false;
+        if (["charge", "pt", "PFMETs"].includes(sel)) return false;
         if (selection[sel] < 0) return false;
         return true;
     });
     selection.forEach(key => {
         if (summary.has(key)) {
-            results.set(key, summary.get(key))
+            results.set(key, summary.get(key));
         }
     });
     return results;
 }
 
 
-// Calculate the invariant mass of a list of particles
-function calculateInvariantMass(particles) { // TODO
+function sumFourVectors(particles) {
     if (particles.length < 1) {
         return -1;
     }
@@ -58,7 +71,6 @@ function calculateInvariantMass(particles) { // TODO
     sumPx = sumPy = sumPz = sumE = 0;
 
     particles.forEach((group, key) => {
-        if (key == "PFMETs") return;
         group.forEach((val) => {
             sumPx += val.px;
             sumPy += val.py;
@@ -67,6 +79,20 @@ function calculateInvariantMass(particles) { // TODO
         });
     });
 
+    return {E: sumE, px: sumPx, py: sumPy, pz: sumPz};
+}
+
+
+// Calculate the invariant mass of a list of particles
+function getInvariantMass(particles) { // TODO
+
+    let sumVector = sumFourVectors(particles);
+    let sumPx, sumPy, sumPz, sumE;
+    sumPx = sumVector.px;
+    sumPy = sumVector.py;
+    sumPz = sumVector.pz;
+    sumE = sumVector.E;
+
     m = sumE*sumE;
     m -= (sumPx*sumPx + sumPy*sumPy + sumPz*sumPz);
     m = Math.sqrt(m);
@@ -74,14 +100,30 @@ function calculateInvariantMass(particles) { // TODO
     return m;
 }
 
-// Check if an event is passing the selection
-function checkIfCurrentEventPassing() {
-    return checkIfEventPassing(ispy.event_index);
+// Calculate the transverse mass of a list of particles
+function getTransverseMass(particles) { // TODO
+
+    let m = 0;
+    let sumVector = sumFourVectors(particles);
+    let m1 = getInvariantMass(sumVector);
+
+    let met = analysis.file_events_summary.get(String(ispy.event_index)).get("PFMETs");
+    let metE = met.px * met.px + met.py * met.py;
+
+    m = m1*m1;
+    m += 2*(metE*sumVector.E - sumVector.px*met.px - sumVector.py*met.py);
+    m = Math.sqrt(m);
+
+    return m;
 }
 
-function checkIfEventPassing(event_index) {
+
+function checkIfEventPassing(event_index=-1) {
     if (!ispy.current_event) {
         return;
+    }
+    if (event_index == -1) {
+        event_index = ispy.event_index;
     }
 
     var pass = true;
