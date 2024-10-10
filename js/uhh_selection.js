@@ -15,9 +15,12 @@ analysis.getSelectionResults = function() {
         return;
     }
     document.getElementById('event-statistics').innerHTML = "Something should be here!";
-    Plotly.newPlot("mt-hist", [{ y: [1, 2, 3] }])
-    Plotly.newPlot("m-hist", [{ y: [1, 2, 3] }])
-    // TODO
+
+    masses = getMassesArray();
+    var m_hist = createHistogramData(masses.m, 0, 200, 20);
+    var mt_hist = createHistogramData(masses.mt, 0, 200, 20);
+    Plotly.newPlot("m-hist", [m_hist]);
+    Plotly.newPlot("mt-hist", [mt_hist]);
     return;
 }
 
@@ -28,88 +31,6 @@ analysis.getSelectionCuts = function() {
         cuts[e.property] = e.getValue();
     });
     return cuts
-}
-
-
-function getMassesArray() {
-    var masses = [];
-    var massesT = [];
-    particles = analysis.getPassingEvents().map(i => {
-        return getSelectionParticles(i);
-    });
-    for (let value of particles) {
-        masses.push(getInvariantMass(value));
-        massesT.push(getTransverseMass(value));
-    }
-    return masses;
-}
-
-
-function getSelectionParticles(event_index) {
-    var results = new Map();
-    let summary = analysis.file_events_summary.get(String(event_index));
-    selection = analysis.getSelectionCuts();
-    selection = Object.keys(selection).filter(sel => {
-        if (["charge", "pt", "PFMETs"].includes(sel)) return false;
-        if (selection[sel] < 0) return false;
-        return true;
-    });
-    selection.forEach(key => {
-        if (summary.has(key)) {
-            results.set(key, summary.get(key));
-        }
-    });
-    return results;
-}
-
-function checkIfEventPassing(event_index=-1) {
-    if (!ispy.current_event) {
-        return;
-    }
-    if (event_index == -1) {
-        event_index = ispy.event_index;
-    }
-
-    var pass = true;
-    var cuts = analysis.getSelectionCuts();
-    var particles = analysis.file_events_summary.get(String(event_index));
-
-    for (let [name, part] of particles) {
-        if (name == "PFMETs") {
-            pass &&= checkMET(part, cuts[name]);
-            break;
-        }
-        if (cuts[name] == -1) continue;
-        if (name == "TrackerMuons" || name == "GsfElectrons") {
-            pass &&= checkCharge(part, cuts["charge"]);
-            if (!pass) break;
-            part = getPtPassingLeptons(part, cuts["pt"]);
-        }
-        if (part.length != cuts[name]) {
-            pass &&= false;
-            break;
-        }
-    };
-    return pass;
-}
-
-// Helper functions to check the selection
-function checkMET(met, cut) {
-    return met["pt"] >= cut;
-}
-
-function checkCharge(leptons, cut) {
-    if (cut == -1) return true;
-    let chargeSum = 0;
-    leptons.forEach(lepton => {
-        chargeSum += lepton["charge"];
-    });
-    chargeSum = Math.min(1, Math.abs(chargeSum));
-    return chargeSum == cut;
-}
-
-function getPtPassingLeptons(leptons, cut) {
-    return leptons.filter(lepton => lepton["pt"] >= cut)
 }
 
 // Get the passing events in the current file
@@ -194,6 +115,79 @@ function getEventsSummary(event_json) {
 // Helper functions for the selection
 //
 
+function getSelectionParticles(event_index) {
+    var results = {index: event_index};
+    var parts = new Map();
+    let summary = analysis.file_events_summary.get(String(event_index));
+    selection = analysis.getSelectionCuts();
+    selection = Object.keys(selection).filter(sel => {
+        if (["charge", "pt"].includes(sel)) return false;
+        if (selection[sel] == 0) return false;
+        return true;
+    });
+    selection.forEach(key => {
+        if (key == "PFMETs") {
+            results["met"] = summary.get(key);
+            return;
+        }
+        if (summary.has(key)) {
+            parts.set(key, summary.get(key));
+        }
+    });
+    results["parts"] = parts;
+    return results;
+}
+
+function checkIfEventPassing(event_index=-1) {
+    if (!ispy.current_event) {
+        return;
+    }
+    if (event_index == -1) {
+        event_index = ispy.event_index;
+    }
+
+    var pass = true;
+    var cuts = analysis.getSelectionCuts();
+    var particles = analysis.file_events_summary.get(String(event_index));
+
+    for (let [name, part] of particles) {
+        if (name == "PFMETs") {
+            pass &&= checkMET(part, cuts[name]);
+            break;
+        }
+        if (cuts[name] == -1) continue;
+        if (name == "TrackerMuons" || name == "GsfElectrons") {
+            pass &&= checkCharge(part, cuts["charge"]);
+            if (!pass) break;
+            part = getPtPassingLeptons(part, cuts["pt"]);
+        }
+        if (part.length != cuts[name]) {
+            pass &&= false;
+            break;
+        }
+    };
+    return pass;
+}
+
+// Helper functions to check the selection
+function checkMET(met, cut) {
+    return met["pt"] >= cut;
+}
+
+function checkCharge(leptons, cut) {
+    if (cut == -1) return true;
+    let chargeSum = 0;
+    leptons.forEach(lepton => {
+        chargeSum += lepton["charge"];
+    });
+    chargeSum = Math.min(1, Math.abs(chargeSum));
+    return chargeSum == cut;
+}
+
+function getPtPassingLeptons(leptons, cut) {
+    return leptons.filter(lepton => lepton["pt"] >= cut)
+}
+
 function sumFourVectors(particles) {
     if (particles.length < 1) {
         return -1;
@@ -215,9 +209,9 @@ function sumFourVectors(particles) {
 
 
 // Calculate the invariant mass of a list of particles
-function getInvariantMass(particles) { // TODO
+function getInvariantMass(sumVector) { // TODO
 
-    let sumVector = sumFourVectors(particles);
+    let m = 0;
     let sumPx, sumPy, sumPz, sumE;
     sumPx = sumVector.px;
     sumPy = sumVector.py;
@@ -232,17 +226,16 @@ function getInvariantMass(particles) { // TODO
 }
 
 // Calculate the transverse mass of a list of particles
-function getTransverseMass(particles) { // TODO
+function getTransverseMass(sumVector, met) {
 
     let m = 0;
-    let sumVector = sumFourVectors(particles);
     let m1 = getInvariantMass(sumVector);
 
-    let met = analysis.file_events_summary.get(String(ispy.event_index)).get("PFMETs");
-    let metE = met.px * met.px + met.py * met.py;
+    let metE2 = met.px * met.px + met.py * met.py;
+    let Et2 = sumVector.E * sumVector.E - sumVector.pz * sumVector.pz;
 
-    m = m1*m1;
-    m += 2*(metE*sumVector.E - sumVector.px*met.px - sumVector.py*met.py);
+    m = m1 * m1;
+    m += 2 * (metE2 * Et2 - sumVector.px * met.px - sumVector.py * met.py);
     m = Math.sqrt(m);
 
     return m;
@@ -253,8 +246,39 @@ function createHistogram(array, start, end, bins) {
     var hist = new Array(bins).fill(0);
     var binWidth = (end - start) / bins;
     array.forEach((val) => {
+        if (val <= start) {
+            hist[0]++;
+            return;
+        }
+        if (val >= end) {
+            hist[bins-1]++;
+            return;
+        }
         let bin = Math.floor(val/binWidth);
         hist[bin]++;
     });
     return hist;    
+}
+
+function createHistogramData(array, start, end, bins) {
+    // Create the data for a histogram of the array
+    return {
+        x:array,
+        type:'histogram',
+        nbinsx:bins,
+    };
+}
+
+function getMassesArray() {
+    var masses = [];
+    var massesT = [];
+    let particles = analysis.getPassingEvents().map(i => {
+        return getSelectionParticles(i);
+    });
+    for (let value of particles) {
+        let sumVector = sumFourVectors(value.parts);
+        masses.push(getInvariantMass(sumVector));
+        massesT.push(getTransverseMass(sumVector, value.met));
+    }
+    return {m: masses, mt: massesT};
 }
