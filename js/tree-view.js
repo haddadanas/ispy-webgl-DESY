@@ -441,6 +441,9 @@ ispy.addControllers = function(group) {
     const row_obj = {
 	number: nobjects,
 	min_pt: min_pt,
+	Electrons: visible,
+	Muons: visible,
+	Photons: visible,
 	Jets: hidden,
 	MET: hidden,
 	"Jet: min Et": jet_min_et,
@@ -503,6 +506,36 @@ ispy.addControllers = function(group) {
 	}
 		
 	if (group.includes('Show/Hide')) {
+		folder.add(row_obj, 'Electrons').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				electron_obj = ispy.scenes[v].getObjectByName(names['GsfElectrons']);
+				if (!electron_obj) return;
+				electron_obj.visible = val;
+			});	
+		});
+
+		folder.add(row_obj, 'Muons').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				['GlobalMuons', 'StandaloneMuons', 'TrackerMuons'].forEach(muonType => {
+					let muon_obj = ispy.scenes[v].getObjectByName(names[muonType]);
+					if (muon_obj) {
+						muon_obj.visible = val;
+					}
+				});
+			});	
+		});
+		
+		folder.add(row_obj, 'Photons').onChange(function() {
+			let val = this.getValue();
+			ispy.views.forEach(v => {
+				photon_obj = ispy.scenes[v].getObjectByName(names['Photons']);
+				if (!photon_obj) return;
+				photon_obj.visible = val;
+			});	
+		});
+
 		folder.add(row_obj, 'Jets').onChange(function() {
 			let val = this.getValue();
 			ispy.views.forEach(v => {
@@ -551,6 +584,7 @@ ispy.addInfo = function(group) {
     const row_obj = {
 	MET: met_pt.toFixed(2) + " GeV",
 	Sel: "0",
+	track: false,
     };
 
 	folder.add(row_obj, 'MET').onFinishChange(function() {
@@ -563,6 +597,12 @@ ispy.addInfo = function(group) {
 	).onFinishChange(function() {
 		// reset to original value
 		this.setValue(ispy.selected_objects.size);
+	});
+
+	folder.add(row_obj, 'track').name(
+		"Track Info"
+	).onChange(function() {
+		ispy.showTrackInfo = this.getValue();
 	});
 
 	// add all controllers to the reduced subfolders for convenience

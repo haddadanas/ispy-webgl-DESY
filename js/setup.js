@@ -549,6 +549,7 @@ ispy.init = function() {
     ispy.raycaster.layers.set(2);
 
     ispy.intersected = null;
+    ispy.showTrackInfo = false;
     
     ispy.renderer.domElement.addEventListener('pointermove', ispy.onMouseMove, false);
     ispy.renderer.domElement.addEventListener('pointerdown', ispy.onMouseDown, false);

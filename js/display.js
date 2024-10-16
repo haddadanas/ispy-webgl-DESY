@@ -201,7 +201,7 @@ ispy.onMouseMove = function(e) {
 
 	document.body.style.cursor = 'auto';
 
-	ispy.highlightTableRow(ispy.intersected.name, ispy.intersected.userData, false);
+	// ispy.highlightTableRow(ispy.intersected.name, ispy.intersected.userData, false);
 
 	if ( ! ispy.intersected.selected ) {
 
@@ -245,10 +245,41 @@ ispy.onMouseMove = function(e) {
 		// ispy.getObjectIds(ispy.scene.getObjectByName(ispy.intersected.name))
 	    // );
 
-	    ispy.highlightTableRow(ispy.intersected.name, ispy.intersected.userData, true);
+	    // ispy.highlightTableRow(ispy.intersected.name, ispy.intersected.userData, true);
 
 	}
 
+    if (ispy.showTrackInfo) {
+        const intersectedObject = intersects[0].object;
+        if (intersectedObject.name.match(/Muon|Electron/i) && intersectedObject.parent.visible) {
+            const matchingTrack = ispy.current_event.Collections[intersectedObject.name][intersectedObject.userData.originalIndex];
+            const chargeIndex = ispy.current_event.Types[intersectedObject.name].findIndex(type => type[0] === 'charge');
+            const bubbleText = `Charge: ${matchingTrack[chargeIndex]}` + '\n' + `Pt: ${intersectedObject.userData.pt.toFixed(2)}`;
+
+            // Remove existing bubble if any
+            const existingBubble = document.querySelector('.bubble');
+            if (existingBubble) {
+                existingBubble.remove();
+            }
+
+            // Create a new bubble
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.innerText = bubbleText;
+            document.body.appendChild(bubble);
+
+            // Position the bubble at the cursor position
+            bubble.style.left = `${pointer.x * window.innerWidth / 2 + window.innerWidth / 2}px`;
+            bubble.style.top = `${-pointer.y * window.innerHeight / 2 + window.innerHeight / 2}px`;
+        }
+        else {
+            // Remove existing bubble if any
+            const existingBubble = document.querySelector('.bubble');
+            if (existingBubble) {
+                existingBubble.remove();
+            }
+        }
+    }
     }
 
 };
@@ -656,32 +687,32 @@ ispy.displayEventObjectData = function() {
 
 };
 
-ispy.highlightTableRow = function(key, objectUserData, doEffect) {
+// ispy.highlightTableRow = function(key, objectUserData, doEffect) {
 
-    if ( ( ispy.currentCollection == key && doEffect ) || ! doEffect ) {
+//     if ( ( ispy.currentCollection == key && doEffect ) || ! doEffect ) {
 
-	var selector = "#" + key.concat(objectUserData.originalIndex);
-	var row = $(selector);
+// 	var selector = "#" + key.concat(objectUserData.originalIndex);
+// 	var row = $(selector);
 
-	if ( row ) {
+// 	if ( row ) {
 
-	    if ( doEffect ) {
+// 	    if ( doEffect ) {
 
-		var color = ispy.inverted_colors ? "#dfdfdf" : "#777";
-		row.css("background-color", color);
-		//row.scrollintoview();
+// 		var color = ispy.inverted_colors ? "#dfdfdf" : "#777";
+// 		row.css("background-color", color);
+// 		//row.scrollintoview();
 
-	    } else {
+// 	    } else {
 
-		row.removeAttr("style");
+// 		row.removeAttr("style");
 
-	    }
+// 	    }
 
-	}
+// 	}
 
-    }
+//     }
 
-};
+// };
 
 ispy.highlightObject = function(objectId) {
 
