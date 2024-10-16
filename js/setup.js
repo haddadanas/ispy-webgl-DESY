@@ -613,10 +613,7 @@ ispy.initSelectionFields = function() {
     nPhoton = -1;
 	chargeSign = "";
 	minPt = -1.0;
-    test = function() {
-        let [text, symbol] = analysis.getCurrentSelectionMessage();
-        swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});
-    }
+    test = analysis.checkCurrentSelection;
 
 
     const row_obj = {
@@ -626,7 +623,9 @@ ispy.initSelectionFields = function() {
 	"charge": chargeSign,
 	"pt": minPt,
     "PFMETs": minPt,
-    "check current": test
+    "check": test,
+    "nSelected": "0",
+    "firstSelected": ""
     };
 
     var naming_map = {
@@ -636,7 +635,9 @@ ispy.initSelectionFields = function() {
         "charge": "Charge Sign",
         "pt": "Min p<sub>T,&#8467;</sub>",
         "PFMETs": "Min <span class='strikethrough'>p<sub>T</sub></span> (MET)",
-        "check current": "Check Current"
+        "check": "Check Selection",
+        "nSelected": "# Passing",
+        "firstSelected": "Passing Events",
     };
 
     Object.keys(row_obj).forEach(function(key) {
@@ -660,6 +661,11 @@ ispy.initSelectionFields = function() {
         if (typeof(row_obj[key]) == "function") {
             cont.domElement.previousSibling.style.width = "100%";
             cont.domElement.previousSibling.style.textAlign = "center";
+        }
+        if (typeof(row_obj[key]) == "string") {
+            cont.onFinishChange(function() {
+                this.setValue(this.initialValue);
+            });                
         }
         cont.onFinishChange(function(value) {
             if (value < -1) this.setValue(-1);

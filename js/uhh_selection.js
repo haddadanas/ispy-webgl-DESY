@@ -66,15 +66,14 @@ analysis.addSelectionGUI = function() {
     });
 }
 
-analysis.getCurrentSelectionMessage = function() {
-    var pass = checkIfEventPassing();
-    if (pass == undefined) {
-        return ["No event file is loaded!", "warning"];
-    }
-    var html = "This Event ";
-    html += (pass ? "passes" : "does not pass") + " the selection!";
-    symbol = pass ? "success" : "error";
-    return [html, symbol];
+analysis.checkCurrentSelection = function() {
+    let [text, symbol] = getCurrentSelectionMessage();
+    swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});
+    if (symbol == "warning") return;
+    ispy.subfoldersReduced["Selection"].find(e => e.property == "nSelected").setValue(analysis.getPassingEvents().length);
+    ispy.subfoldersReduced["Selection"].find(e => e.property == "firstSelected").setValue(
+        analysis.getPassingEvents().map(e => Number(e) + 1).slice(0, 5).join(", ")
+    );
 }
 
 analysis.getSelectionResults = function() {
@@ -190,7 +189,7 @@ function getSelectionParticles(event_index) {
     selection = analysis.getSelectionCuts();
     selection = Object.keys(selection).filter(sel => {
         if (["charge", "pt"].includes(sel)) return false;
-        if (selection[sel] == 0) return false;
+        if (selection[sel] == 0 || selection[sel] == -1) return false;
         return true;
     });
     selection.forEach(key => {
@@ -346,7 +345,20 @@ function getMassesArray() {
     for (let value of particles) {
         let sumVector = sumFourVectors(value.parts);
         masses.push(getInvariantMass(sumVector));
-        massesT.push(getTransverseMass(sumVector, value.met));
+        if (value.met) {
+            massesT.push(getTransverseMass(sumVector, value.met));
+        }
     }
     return {m: masses, mt: massesT};
+}
+
+function getCurrentSelectionMessage() {
+    var pass = checkIfEventPassing();
+    if (pass == undefined) {
+        return ["No event file is loaded!", "warning"];
+    }
+    var html = "This Event ";
+    html += (pass ? "passes" : "does not pass") + " the selection!";
+    symbol = pass ? "success" : "error";
+    return [html, symbol];
 }
