@@ -16,8 +16,8 @@ analysis.getSelectionResults = function() {
     document.getElementById('event-statistics').innerHTML = "Something should be here!";
 
     masses = getMassesArray();
-    var m_hist = createHistogramData(masses.m, 0, 200, 20);
-    var mt_hist = createHistogramData(masses.mt, 0, 200, 20);
+    var m_hist = createHistogramData(masses.m.values().toArray(), 0, 200, 20);
+    var mt_hist = createHistogramData(masses.mt.values().toArray(), 0, 200, 20);
     Plotly.newPlot("m-hist", [m_hist]);
     Plotly.newPlot("mt-hist", [mt_hist]);
     return;
@@ -47,6 +47,18 @@ analysis.getPassingEvents = function() {
     return passing_events;
 }
 
+// Get CSV of the passing events
+analysis.createCSV = function() {
+    var masses = getMassesArray();
+    var csv = "data:text/csv;charset=utf-8,Event Index,Invariant Mass,Transverse Mass\r\n";
+    masses.m.forEach((m, index) => {
+        csv += index + "," + m + "," + masses.mt.get(index) + "\r\n";
+    });
+    var encodedUri = encodeURI(csv);
+    window.open(encodedUri);
+
+    return csv;
+}
 //
 // Get the needed information of all events in the current file
 //
@@ -269,16 +281,16 @@ function createHistogramData(array, start, end, bins) {
 }
 
 function getMassesArray() {
-    var masses = [];
-    var massesT = [];
+    var masses = new Map();
+    var massesT = new Map();
     let particles = analysis.getPassingEvents().map(i => {
         return getSelectionParticles(i);
     });
     for (let value of particles) {
         let sumVector = sumFourVectors(value.parts);
-        masses.push(getInvariantMass(sumVector));
+        masses.set(value.index, getInvariantMass(sumVector));
         if (value.met) {
-            massesT.push(getTransverseMass(sumVector, value.met));
+            massesT.set(value.index, getTransverseMass(sumVector, value.met));
         }
     }
     return {m: masses, mt: massesT};
