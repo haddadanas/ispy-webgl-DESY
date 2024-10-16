@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="./css/solid.min.css">							    
   <link rel="stylesheet" href="./css/ispy.css">
 
-  <script src="js/lib/jquery-1.11.1.min.js"></script>
+  <script src="js/lib/jquery-3.7.1.min.js"></script>
+  <script src="js/lib/jquery-ui.min.js"></script>
   <script src="js/lib/jquery.scrollintoview.min.js"></script>
   <script src="js/lib/stupidtable.min.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
@@ -65,6 +66,14 @@
   <script src="js/uhh_selection.js"></script>
   <script src="js/display.js"></script>
   <script src="js/ispy.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $("#selection-fields").draggable({
+        handle: ".modal-header"
+      });
+    });
+  </script>
 
   <title>iSpy WebGL</title>
 </head>
@@ -173,7 +182,7 @@
           </div>
     
     <div class="btn-group" role="group">
-            <button type="button" id="analysis_btn" class="btn btn-default" disabled data-toggle="modal" data-target="#analysis" onclick="analysis.getSelectionResults();" title="Run Analysis">
+            <button type="button" id="analysis_btn" class="btn btn-default" disabled data-toggle="modal" data-target="#selection-fields" title="Run Analysis">
               <i class="fa fa-chart-bar"></i>
             </button>
         </div>
@@ -489,6 +498,39 @@ piwikTracker.enableLinkTracking();
     </div>
   </div>
 </div>
+
+  <div id="selection-fields" role="dialog" class="modal selection-modal" data-backdrop="false" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content bordered black">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i><span class="sr-only">Close</span></button>
+          <h4 class="modal-title black">Events Selection</h4>
+        </div>
+        <div class="modal-body">
+
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#higgs" aria-controls="higgs-tab" role="tab" data-toggle="tab">Higgs</a></li>
+            <li role="presentation"><a href="#wboson" aria-controls="w-tab" role="tab" data-toggle="tab">W Boson</a></li>
+            <li role="presentation" class="active"><a href="#zboson" aria-controls="z-tab" role="tab" data-toggle="tab">Z Boson</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="higgs-tab">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="w-tab">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="z-tab">
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#analysis" onclick="analysis.getSelectionResults();">Next</button>
+      </div>
+      </div>
+    </div>
+  </div>
 
 <div id="about" role="dialog" class="modal">
   <div class="modal-dialog">

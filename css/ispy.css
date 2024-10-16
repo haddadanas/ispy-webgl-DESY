@@ -383,6 +383,44 @@ canvas.hover {
   border: 0;
 }
 
+/* Extend existing modal styles */
+.selection-modal .modal-dialog {
+  margin: 0 auto;
+  top: 40%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+}
+
+.selection-modal .modal-dialog button.close {
+  color: red;
+  text-shadow: none;
+  opacity: 1.0;
+}
+
+.selection-modal .modal-content.black {
+  color: white;
+  background-color: black;
+}
+
+.selection-modal .modal-content.white {
+  color: black;
+  background-color: white;
+}
+
+.selection-modal .modal-content div {
+  border: 0;
+}
+
+.selection-modal {
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.selection-modal .modal-dialog {
+  pointer-events: auto; /* Enable clicks on the modal content */
+}
+
 #loading .modal-content {
   width: 50%;
   text-align: center;
