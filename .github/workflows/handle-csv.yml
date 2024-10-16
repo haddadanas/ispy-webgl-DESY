@@ -1,0 +1,30 @@
+name: Handle CSV Data
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [handle-csv]
+
+jobs:
+  handle-csv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'  # Specify the Python version you need
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy matplotlib pandas  # Install the required Python packages
+
+      - name: Handle CSV Data
+        run: |
+          echo "${{ github.event.client_payload.csv_data }}" > received_data.csv
+          python src/plot_csv.py received_data.csv  # Run your Python script on the received CSV data
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
