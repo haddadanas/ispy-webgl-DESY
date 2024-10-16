@@ -536,6 +536,9 @@ ispy.init = function() {
 
     document.getElementById('version').innerHTML = ispy.version;
     document.getElementById('threejs').innerHTML = "r"+THREE.REVISION;
+    document.getElementById('sweetalert').innerHTML = "2.1.0";
+    document.getElementById('plotly').innerHTML = Plotly.version;
+    
     
     window.addEventListener('resize', ispy.onWindowResize, false);
 
@@ -602,28 +605,63 @@ ispy.initSelectionFields = function() {
 	gui_elem = ispy.guiReduced;
 
     let folder = gui_elem.__folders["Event Selection"];
-	
-	let names = ispy.getSceneObjects();
-	// pt is element 1 in the collection object (inconvinient definition by design)
-	nMuon = 0;
-	nElectron = 0;
-	chargeSign = false;
-	minPt = 0.0;
+	let nMuon, nElectron, nPhoton, chargeSign, minPt;
+
+	nMuon = -1;
+	nElectron = -1;
+    nPhoton = -1;
+	chargeSign = "";
+	minPt = -1.0;
+    test = function() {
+        let [text, symbol] = analysis.getCurrentSelectionMessage();
+        swal(text, {title: "Selection Results", icon: symbol, buttons: false, timer: 3000});
+    }
 
 
     const row_obj = {
-	"# Muons": nMuon,
-	"# Electrons": nElectron,
-	"Charge Sign": chargeSign,
-	"Min Pt": minPt,
+	"TrackerMuons": nMuon,
+	"GsfElectrons": nElectron,
+    "Photons": nPhoton,
+	"charge": chargeSign,
+	"pt": minPt,
+    "PFMETs": minPt,
+    "check current": test
+    };
+
+    var naming_map = {
+        "TrackerMuons": "# &mu;",
+        "GsfElectrons": "# e",
+        "Photons": "# &gamma;",
+        "charge": "Charge Sign",
+        "pt": "Min p<sub>T,&#8467;</sub>",
+        "PFMETs": "Min <span class='strikethrough'>p<sub>T</sub></span> (MET)",
+        "check current": "Check Current"
     };
 
     Object.keys(row_obj).forEach(function(key) {
+        elem_name = naming_map[key];
+
         // add the controller to the folder
-        var cont = folder.add(row_obj, key)
+        if (key == "charge") {
+            var cont = folder.add(row_obj, key, ["", "same", "opposite"]).name(elem_name);
+            cont.getValue = function() {
+                result = this.object[this.property];
+                if (result == "opposite") return 0;
+                if (result == "same") return 1;
+                return -1;
+            }
+            return;
+        }
+
+        var cont = folder.add(row_obj, key).name(elem_name);
+
         if (typeof(row_obj[key]) == "boolean") return;
+        if (typeof(row_obj[key]) == "function") {
+            cont.domElement.previousSibling.style.width = "100%";
+            cont.domElement.previousSibling.style.textAlign = "center";
+        }
         cont.onFinishChange(function(value) {
-            if (value < 0) this.setValue(0);
+            if (value < -1) this.setValue(-1);
         });
     });
 

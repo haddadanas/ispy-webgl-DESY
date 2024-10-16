@@ -453,8 +453,10 @@ ispy.addControllers = function(group) {
 
 	let names = ispy.getSceneObjects();
 
-	if (group.includes('Momentum Cut')) {
-		folder.add(row_obj, 'min_pt', 0, 100).onChange(function() {
+	if (group.includes('Momentum Cut (GeV)')) {
+		folder.add(row_obj, 'min_pt', 0, 100).name(
+			"min. p<sub>T, visible</sub>"
+		).onChange(function() {
 			
 			ispy.views.forEach(v => {
 	    
@@ -478,7 +480,9 @@ ispy.addControllers = function(group) {
 			
 		});
 		
-		folder.add(row_obj, 'Jet: min Et', 0, 200).onChange(function() {
+		folder.add(row_obj, 'Jet: min Et', 0, 200).name(
+			"min. E<sub>T, Jets</sub>"
+		).onChange(function() {
 
 			ispy.views.forEach(v => {
 	    
@@ -546,11 +550,19 @@ ispy.addInfo = function(group) {
 
     const row_obj = {
 	MET: met_pt.toFixed(2) + " GeV",
+	Sel: "0",
     };
 
 	folder.add(row_obj, 'MET').onFinishChange(function() {
 		// reset to original value
 		this.setValue(this.initialValue);
+	});
+
+	folder.add(row_obj, 'Sel').name(
+		"Selected Tracks"
+	).onFinishChange(function() {
+		// reset to original value
+		this.setValue(ispy.selected_objects.size);
 	});
 
 	// add all controllers to the reduced subfolders for convenience

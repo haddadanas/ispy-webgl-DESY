@@ -22,6 +22,25 @@ canvas.hover {
   box-sizing: content-box;                                                             
 }
 
+.strikethrough {
+  position: relative;
+}
+.strikethrough:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  border-top: 1px solid;
+  border-color: inherit;
+  
+  -webkit-transform:rotate(-45deg);
+  -moz-transform:rotate(-45deg);
+  -ms-transform:rotate(-45deg);
+  -o-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+}
+
 #stats {
   position: absolute;
   top:0;
@@ -362,6 +381,44 @@ canvas.hover {
 
 .modal-content div {
   border: 0;
+}
+
+/* Extend existing modal styles */
+.selection-modal .modal-dialog {
+  margin: 0 auto;
+  top: 40%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+}
+
+.selection-modal .modal-dialog button.close {
+  color: red;
+  text-shadow: none;
+  opacity: 1.0;
+}
+
+.selection-modal .modal-content.black {
+  color: white;
+  background-color: black;
+}
+
+.selection-modal .modal-content.white {
+  color: black;
+  background-color: white;
+}
+
+.selection-modal .modal-content div {
+  border: 0;
+}
+
+.selection-modal {
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.selection-modal .modal-dialog {
+  pointer-events: auto; /* Enable clicks on the modal content */
 }
 
 #loading .modal-content {
