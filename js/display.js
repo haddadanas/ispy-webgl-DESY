@@ -184,8 +184,8 @@ ispy.onMouseMove = function(e) {
     const left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
     const top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
 
-    const offsetX = display.getBoundingClientRect().left + window.pageXOffset - left;
-    const offsetY = display.getBoundingClientRect().top + window.pageYOffset - top;
+    const offsetX = display.getBoundingClientRect().left - left;
+    const offsetY = display.getBoundingClientRect().top - top;
 
     const pointer = new THREE.Vector2();
     

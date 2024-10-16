@@ -8,15 +8,15 @@ ispy.detector_description = {
 	
 	"RPCMinusEndcap3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Resistive Plate Chambers (-)",
-	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.2, linewidth: 1.0}
+	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"RPCPlusEndcap3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Resistive Plate Chambers (+)",
-	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.2, linewidth: 1.0}
+	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"RPCBarrel3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Resistive Plate Chambers (barrel)",
-	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.2, linewidth: 1.0}
+	    fn: ispy.makeRPC, style: {color: "rgb(60%, 80%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"GEMMinus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Gas Electron Multipliers (-)",
@@ -28,43 +28,43 @@ ispy.detector_description = {
 	},	
 	"CSC3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Cathode Strip Chambers",
-	    fn: ispy.makeCSC, style: {color: "rgb(60%, 70%, 10%)", opacity: 0.2, linewidth: 1.0}
+	    fn: ispy.makeCSC, style: {color: "rgb(60%, 70%, 10%)", opacity: 0.5, linewidth: 1.0}
 	},	
 	"DTs3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "Drift Tubes",
-	    fn: ispy.makeDT, style: {color: "rgb(80%, 40%, 0%)", opacity: 0.2, linewidth: 1.0}
+	    fn: ispy.makeDT, style: {color: "rgb(80%, 40%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},	
 	"HcalForwardMinus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Forward (-)",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.1, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"HcalForwardPlus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Forward (+)",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.1, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"HcalOuter3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Outer",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.04, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},	
 	"HcalEndcapMinus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Endcap (-)",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.01, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"HcalEndcapPlus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Endcap (+)",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.01, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},	
 	"HcalBarrel3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "HCAL Barrel",
-	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.01, linewidth: 1.0}
+	    fn: ispy.makeHcal, style: {color: "rgb(70%, 70%, 0%)", opacity: 0.5, linewidth: 1.0}
 	},
 	"EcalEndcapMinus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "ECAL Endcap (-)",
-	    fn: ispy.makeEcal, style: {color: "rgb(50%, 80%, 100%)", opacity: 0.05, linewidth: 0.5}
+	    fn: ispy.makeEcal, style: {color: "rgb(50%, 80%, 100%)", opacity: 0.1, linewidth: 0.5}
 	},
 	"EcalEndcapPlus3D_V1": {
 	    type: ispy.BOX, on: false, group: "Detector", name: "ECAL Endcap (+)",
-	    fn: ispy.makeEcal, style: {color: "rgb(50%, 80%, 100%)", opacity: 0.05, linewidth: 0.5}
+	    fn: ispy.makeEcal, style: {color: "rgb(50%, 80%, 100%)", opacity: 0.1, linewidth: 0.5}
 	},	
 	"EcalBarrel3D_V1": {
 	    type: ispy.BOX, on: true, group: "Detector", name: "ECAL Barrel",
@@ -407,15 +407,15 @@ ispy.event_description = {
 	    scale: 0.1, selection: {"min_energy": 0.1}
 	},
 	"METs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (Reco)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (Reco)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PFMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PF)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PF)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PATMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PAT)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PAT)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"Jets_V1": {
@@ -451,19 +451,19 @@ ispy.event_description = {
 	"GlobalMuons_V1": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Global Muons (Reco)",
 	    extra: "Points_V1", assoc: "MuonGlobalPoints_V1",
-	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 3},
+	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 2},
 	    selection:{"min_pt":1.0, "index":0}
 	},
 	"GlobalMuons_V2": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Global Muons (Reco)",
 	    extra: "Points_V1", assoc: "MuonGlobalPoints_V1",
-	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 3},
+	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 2},
 	    selection:{"min_pt":1.0, "index":0}
 	},
 	"PATGlobalMuons_V1": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Global Muons (PAT)",
 	    extra: "Points_V1", assoc: "PATMuonGlobalPoints_V1",
-	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 3},
+	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 2},
 	    selection:{"min_pt":1.0, "index":0}
 	},    
 	"StandaloneMuons_V1": {
@@ -485,25 +485,25 @@ ispy.event_description = {
 	    selection: {"min_pt":1.0, "index":0}
 	},
 	"TrackerMuons_V1": {
-	    type: ispy.ASSOC, on: true, group: "Physics", name: "Tracker Muons (Reco)",
+	    type: ispy.ASSOC, on: false, group: "Physics", name: "Tracker Muons (Reco)",
 	    extra: "Points_V1", assoc: "MuonTrackerPoints_V1",
 	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 1},
 	    selection:{"min_pt":1.0, "index":0}
 	},
 	"TrackerMuons_V2": {
-            type: ispy.ASSOC, on: true, group: "Physics", name: "Tracker Muons (Reco)",
+            type: ispy.ASSOC, on: false, group: "Physics", name: "Tracker Muons (Reco)",
             extra: "Extras_V1", assoc: "MuonTrackerExtras_V1",
             fn: ispy.makeTracks, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 1},
 	    selection:{"min_pt":1.0, "index":0}
 	},
 	"PATTrackerMuons_V1": {
-	    type: ispy.ASSOC, on: true, group: "Physics", name: "Tracker Muons (PAT)",
+	    type: ispy.ASSOC, on: false, group: "Physics", name: "Tracker Muons (PAT)",
 	    extra: "Points_V1", assoc: "PATMuonTrackerPoints_V1",
 	    fn: ispy.makeTrackPoints, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 1},
 	    selection:{"min_pt":1.0, "index":0}
 	},
 	"PATTrackerMuons_V2": {
-	    type: ispy.ASSOC, on: true, group: "Physics", name: "Tracker Muons (PAT)",
+	    type: ispy.ASSOC, on: false, group: "Physics", name: "Tracker Muons (PAT)",
 	    extra: "Extras_V1", assoc: "PATMuonTrackExtras_V1",
 	    fn: ispy.makeTracks, style: {color: "rgb(100%, 0%, 0%)", opacity: 1.0, linewidth: 1},
 	    selection:{"min_pt":1.0, "index":0}
@@ -511,19 +511,19 @@ ispy.event_description = {
 	"GsfElectrons_V1": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Electron Tracks (GSF)",
 	    extra: "Extras_V1", assoc: "GsfElectronExtras_V1",
-	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 0.9, linewidth: 3},
+	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 0.9, linewidth: 2},
 	    selection: {"min_pt":1.0, "index":0}
 	},
 	"GsfElectrons_V2": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Electron Tracks (GSF)",
 	    extra: "Extras_V1", assoc: "GsfElectronExtras_V1",
-	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 1, linewidth: 3},
+	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 1, linewidth: 2},
 	    selection: {"min_pt":1.0, "index":0}
 	},
 	"GsfElectrons_V3": {
 	    type: ispy.ASSOC, on: true, group: "Physics", name: "Electron Tracks (GSF)",
 	    extra: "Extras_V1", assoc: "GsfElectronExtras_V1",
-	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 1, linewidth: 3},
+	    fn: ispy.makeThickTracks, style: {color: "rgb(10%, 100%, 10%)", opacity: 1, linewidth: 2},
 	    selection: {"min_pt":1.0, "index":0}
 	},
 	"PATElectrons_V1": {
@@ -752,15 +752,15 @@ ispy.event_description = {
 	    scale: 0.1, selection: {"min_energy": 0.1}
 	},
 	"METs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (Reco)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (Reco)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PFMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PF)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PF)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PATMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PAT)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PAT)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"Jets_V1": {
@@ -1099,15 +1099,15 @@ ispy.event_description = {
 	    scale: 0.1, selection: {"min_energy": 0.1}
 	},
 	"METs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (Reco)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (Reco)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PFMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PF)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PF)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"PATMETs_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Missing Et (PAT)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Missing Et (PAT)",
 	    fn: ispy.makeMET, style: {color: "rgb(100%, 50%, 100%)", linewidth:2, scale: 0.025}, selection: {"min_pt": 0.0}
 	},
 	"Jets_V1": {
