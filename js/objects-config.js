@@ -445,7 +445,7 @@ ispy.event_description = {
 	    fn: ispy.makePhoton, style: {color: "rgb(67%, 0%, 100%)", opacity: 1.0, linewidth: 2}, selection: {"min_energy": 10.0}
 	},
 	"PATPhotons_V1": {
-	    type: ispy.SHAPE, on: false, group: "Physics", name: "Photons (PAT)",
+	    type: ispy.SHAPE, on: true, group: "Physics", name: "Photons (PAT)",
 	    fn: ispy.makePhoton, style: {color: "rgb(67%, 0%, 100%)", opacity: 1.0, linewidth: 2}, selection: {"min_energy":10.0}
 	},
 	"GlobalMuons_V1": {
