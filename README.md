@@ -23,25 +23,25 @@ iSpy WebGL ist ein browserbasiertes Event Display für das CMS Experiment am LHC
 
 Über das Menü "Open File" <i class="fa fa-folder-open" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> können Events geöffnet werden. Es gibt zwei Möglichkeiten, Events zu öffnen:
 
-1. **Open local file(s)**: Wählen Sie eine Datei aus Ihrem lokalen Dateisystem aus. Die Datei muss im [.ig](https://github.com/cms-outreach/ispy-analyzers) Format vorliegen.
+1. **Open local file(s)**: Hier kann eine Datei aus dem lokalen Dateisystem aus ausgewählt werden. Die Datei muss im [.ig](https://github.com/cms-outreach/ispy-analyzers) Format vorliegen.
 
-2. **Open file(s) from the Web**: Wählen Sie aus bereitgestellten Beispielen für verschiedene Prozesse aus.
+2. **Open file(s) from the Web**: Hier kann aus bereitgestellten Beispielen für verschiedene Prozesse ausgewählt werden.
 
 ### Navigation zwischen Events
 
-Nachdem ein file geöffnet wurde, können Sie durch die Events dieses files navigieren, indem Sie die Pfeiltasten Ihres Tastatures <i class="fa fa-arrow-left" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> <i class="fa fa-arrow-right" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> oder die Knöpfe <i class="fa fa-step-backward" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> <i class="fa fa-step-forward" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> aus der oberen Leiste verwenden.
+Nachdem ein file geöffnet wurde, können durch die Events dieses files navigieren, indem die Pfeiltasten Ihres Tastatures <i class="fa fa-arrow-left" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> <i class="fa fa-arrow-right" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> oder die Knöpfe <i class="fa fa-step-backward" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> <i class="fa fa-step-forward" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> aus der oberen Leiste verwenden werden.
 
 ### Ansichten wechseln
 
-Ein Event kann in verschiedenen Ansichten dargestellt werden. Die Ansichten können über die Knöpfe <span style="border: 1px solid black; padding: 3px; display: inline-block;">3D</span>, <span style="border: 1px solid black; padding: 3px; display: inline-block;">r&phi;</span> oder <span style="border: 1px solid black; padding: 3px; display: inline-block;">&rho;z</span> aus der oberen Leiste gewechselt werden. Um auf die Anfangsansicht zurückzukehren, klicken Sie auf den Knopf <i class="fa fa-home" style="border: 1px solid black; padding: 6px; display: inline-block;"></i>.
+Ein Event kann in verschiedenen Ansichten dargestellt werden. Die Ansichten können über die Knöpfe <span style="border: 1px solid black; padding: 3px; display: inline-block;">3D</span>, <span style="border: 1px solid black; padding: 3px; display: inline-block;">r&phi;</span> oder <span style="border: 1px solid black; padding: 3px; display: inline-block;">&rho;z</span> aus der oberen Leiste gewechselt werden. Um auf die Anfangsansicht zurückzukehren, kann auf den Knopf <i class="fa fa-home" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> geklickt werden.
 
-In der 3D Ansicht lässt sich das Event auch entlang einer Achse anzeigen. Dazu können Sie die Knöpfe <img src="./graphics/yx_small.png" style="background-color: grey;"/>, <img src="./graphics/xz_small.png" style="background-color: grey;"/>  und <img src="./graphics/yz_small.png" style="background-color: grey;"/> verwenden. Dies kann bei der Bestimmun der Teilchenladung und die Beobachtung der Spurkrümmung hilfreich sein.
+In der 3D Ansicht lässt sich das Event auch entlang einer Achse anzeigen. Dazu können die Knöpfe <img src="./graphics/yx_small.png" style="background-color: grey;"/>, <img src="./graphics/xz_small.png" style="background-color: grey;"/>  und <img src="./graphics/yz_small.png" style="background-color: grey;"/> verwenden werden. Dies kann bei der Bestimmun der Teilchenladung und die Beobachtung der Spurkrümmung hilfreich sein.
 
 ### Detektor Elemente ein- und ausblenden
 
-Unter dem Reiter "Detector" in der Kontrollleiste auf der rechten Seite, können Sie die verschiedenen Detektorelemente (in abstrahierter Form) ein- und ausblenden. Die Detektorelemente sind in verschiedene Gruppen unterteilt, die Sie über die Dropdown-Liste auswählen können. Dafür muss die Checkbox "show" unter der jeweiligen Gruppe aktiviert werden.
+Unter dem Reiter "Detector" in der Kontrollleiste auf der rechten Seite, können die verschiedenen Detektorelemente (in abstrahierter Form) ein- und ausblenden werden. Die Detektorelemente sind in verschiedene Gruppen unterteilt, die über die Dropdown-Liste auswählen werden können. Dafür muss die Checkbox "show" unter der jeweiligen Gruppe aktiviert werden.
 
-Eine "reele" Ansicht der CMS Detektorteile kann aber auch angezeigt werden. Dafür muss das Modell des jeweiligen Teils über den Knopf "Import 3D Model" <i class="fa fa-download" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> und danach "import file(s) from the Web" importiert werden. Beachten Sie, dass die 3D Modelle in einigen Fällen sehr groß sein können und die Darstellung des Events verlangsamen können.
+Eine "reele" Ansicht der CMS Detektorteile kann aber auch angezeigt werden. Dafür muss das Modell des jeweiligen Teils über den Knopf "Import 3D Model" <i class="fa fa-download" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> und danach "import file(s) from the Web" importiert werden. Zu Bachten ist jedoch, dass die 3D Modelle in einigen Fällen sehr groß sein können und die Darstellung des Events verlangsamen können.
 Durch neuladen der Seite, können alle importierten Modelle wieder entfernt werden.
 
 ### Eventobjecte ein- und ausblenden
