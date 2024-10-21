@@ -39,6 +39,47 @@ In der 3D Ansicht lässt sich das Event auch entlang einer Achse anzeigen. Dazu 
 
 ### Detektor Elemente ein- und ausblenden
 
+Unter dem Reiter "Detector" in der Kontrollleiste auf der rechten Seite, können Sie die verschiedenen Detektorelemente (in abstrahierter Form) ein- und ausblenden. Die Detektorelemente sind in verschiedene Gruppen unterteilt, die Sie über die Dropdown-Liste auswählen können. Dafür muss die Checkbox "show" unter der jeweiligen Gruppe aktiviert werden.
+
+Eine "reele" Ansicht der CMS Detektorteile kann aber auch angezeigt werden. Dafür muss das Modell des jeweiligen Teils über den Knopf "Import 3D Model" <i class="fa fa-download" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> und danach "import file(s) from the Web" importiert werden. Beachten Sie, dass die 3D Modelle in einigen Fällen sehr groß sein können und die Darstellung des Events verlangsamen können.
+Durch neuladen der Seite, können alle importierten Modelle wieder entfernt werden.
+
+### Eventobjecte ein- und ausblenden
+
+Die Teilchenspuren in einem geladenen Event können über die Checkboxen unter dem Reiter "Show/Hide" in der Kontrollleiste auf der rechten Seite ein- und ausgeblendet werden. Um diese Einstellung beim Wechseln zwischen Events beizubehalten, kann die Checkbox "Keep settings" aktiviert werden.
+
+Bestimmte Informationen yum Events bzw. zu den Teilchen können über die Checkboxen unter dem Reiter "Event Info" ein- und ausgeblendet werden. Z.B. kann das pT und die Ladung von Elektronen und Muonen durch das Aktivieren der Checkboxen "Track Info" beim rüberfahren über die Spur angezeigt werden.
+
+### Anwenden von Schnitten
+
+Aktuell können Schnitte auf das pT und ET angewendet werden und dabei nur die Spuren anzeigen, die diese Schnitte erfüllen. Dazu können die Schieberegler unter dem Reiter "Momentum Cuts" verwenden werden. Die Schieberegler können auch durch das Eingeben von Werten in das Textfeld geändert werden. 
+
+!!! note
+    Die Schnitte dienen nur der Visualisierung und haben keinen Einfluss auf auf die spätere Selection der Events.
+
+### Invariantenmasse berechnen
+
+Spuren von Muonen und Elektronen können durch das Draufklicken selektiert werden und die Invariantenmasse dieser Teilchen kann durch das Drücken von <span style="border: 1px solid black; padding: 3px; display: inline-block;">m</span> auf der Tastatur berechnet werden. Die Invariantenmasse wird in einem Popup-Fenster angezeigt. Die anzahl der Selektierten Spuren, kann unter dem Reiter "Event Info" eingesehen werden.
+
+## Die Selektion und Analyse von Events
+
+### Selektionschnitte auf einem bestimmten Event Testen
+
+<img src="./graphics/selection_gui.png"></img>
+
+Unter dem Reiter "Event Selection" können die Schnitte auf die verschiedenen Teilchenvariablen anwenden. Wie im Bild zu sehen, sind 3 unterschiedliche Arten von Schnitten möglich:
+
+1. **Teilchenanzahl**: Die kann auf Muonen, Elektronen und Photonen und Jets angewendet werden. Die Anzahl ist dabei eine positive ganze Zahl, womit nur Events mit exakter Übereinstimmung der Anzahl an Teilchen selektiert werden. Wird im Feld "-1" eingegeben, wird dieser Schnitt ignoriert und diese Teilchen fließen weder in die Selektion noch in der Berechnung der Invariantenmasse ein.
+
+2. **Charge Sign**: Hier kann ausgewählt werden, ob bei jeweils einer Teilchengruppe es sich um Teilchen-Antiteilchen Paare handelt (Ladungssumme ergibt dabei 0) oder es sich um Teilchen bzw. Antiteilchen handelt. Die Auswahlmöglichkeiten sind "{leer}", "Same" und "Opposite". Bei "" wird dieser Schnitt ignoriert und die Selektion wird nicht auf die Ladung der Teilchen angewendet.
+
+3. **Impuls**: Hier kann den Mindestimpuls sowohl für die Leptonen (Muonen und Elektronen) als auch für das MET ausgewählt werden. Die Einheit ist GeV und durch die Eingabe von "-1" wird dieser Schnitt ignoriert.
+
+Mit dem Knopf "Check Selection" wird die Selektion auf das aktuelle Event angewendet. Außerdem werden in den 2 drunterliegenden Feldern die Anzahl der Events im File, die diese Selektion erfüllen, sowie die Indizes der ersten 5 Events angezeigt.
+
+### Plotten der Invarianten Masse
+
+Nachdem eine Selektion eingestellt ist, kann über den Analyse-Knopf <i class="fa fa-chart-bar" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> die Invariantenmasse der selektierten Events geplottet werden. Der Plot wird in einem Popup-Fenster unter dem Tab "Invariant Mass" angezeigt. Die eingeflossenen Daten in den Plot könne als CSV-Datei durch den Knopf unter dem Plot heruntergeladen werden.
 
 ## Papers und talks
 
