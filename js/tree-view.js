@@ -210,11 +210,6 @@ ispy.addSelectionRow = function(group, key, name, objectIds, visible) {
 	
 	sf.domElement.onclick = function(e) {
 	    
-	    // ispy.displayCollection(
-		// key, group, name,
-		// ispy.getObjectIds(ispy.scene.getObjectByName(key))
-	    // );
-	    
 	};
 	
     }
