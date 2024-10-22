@@ -622,7 +622,7 @@ ispy.initSelectionFields = function() {
     "Photons": nPhoton,
 	"charge": chargeSign,
 	"pt": minPt,
-    "PFMETs": minPt,
+    "METs": minPt,
     "check": test,
     "nSelected": "0",
     "firstSelected": ""
@@ -634,7 +634,7 @@ ispy.initSelectionFields = function() {
         "Photons": "# &gamma;",
         "charge": "Charge Sign",
         "pt": "Min p<sub>T,&#8467;</sub>",
-        "PFMETs": "Min <span class='strikethrough'>p<sub>T</sub></span> (MET)",
+        "METs": "Min <span class='strikethrough'>p<sub>T</sub></span> (MET)",
         "check": "Check Selection",
         "nSelected": "# Passing",
         "firstSelected": "Passing Events",

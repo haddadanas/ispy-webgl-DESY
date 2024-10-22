@@ -454,7 +454,7 @@ ispy.addControllers = function(group) {
 	
     let folder = gui_elem.__folders[group];
 
-	let names = ispy.getSceneObjects();
+	let names = analysis.getSceneObjects();
 
 	if (group.includes('Momentum Cut (GeV)')) {
 		folder.add(row_obj, 'min_pt', 0, 100).name(
@@ -489,7 +489,7 @@ ispy.addControllers = function(group) {
 
 			ispy.views.forEach(v => {
 	    
-				let physic_objs = ispy.scenes[v].getObjectByName(names['PFJets']).children
+				let physic_objs = ispy.scenes[v].getObjectByName(names['Jets']).children
 
 				if ( ! physic_objs.length )
 					return;
@@ -539,7 +539,7 @@ ispy.addControllers = function(group) {
 		folder.add(row_obj, 'Jets').onChange(function() {
 			let val = this.getValue();
 			ispy.views.forEach(v => {
-				jet_obj = ispy.scenes[v].getObjectByName(names['PFJets']);
+				jet_obj = ispy.scenes[v].getObjectByName(names['Jets']);
 				if (!jet_obj) return;
 				jet_obj.visible = val;
 			});	
@@ -548,7 +548,7 @@ ispy.addControllers = function(group) {
 		folder.add(row_obj, 'MET').onChange(function() {
 			let val = this.getValue();
 			ispy.views.forEach(v => {
-				met_obj = ispy.scenes[v].getObjectByName(names['PFMETs']);
+				met_obj = ispy.scenes[v].getObjectByName(names['METs']);
 				met_obj.visible = val;
 			});	
 		});
@@ -577,9 +577,9 @@ ispy.addInfo = function(group) {
 	
     let folder = gui_elem.__folders[group];
 	
-	let names = ispy.getSceneObjects();
+	let names = analysis.getSceneObjects();
 	// pt is element 1 in the collection object (inconvinient definition by design)
-	met_pt = ispy.current_event.Collections[names['PFMETs']][0][1];
+	met_pt = ispy.current_event.Collections[names['METs']][0][1];
 
     const row_obj = {
 	MET: met_pt.toFixed(2) + " GeV",
@@ -637,25 +637,3 @@ ispy.applySavedSettings = function(settings) {
 	return {};
 };
 
-ispy.getSceneObjects = function() {
-	// Get all object names in the scene
-	// TODO also get the objects themself to refactor this from addControllers
-	// objects = {};
-	// ispy.views.forEach((v) => {
-	// 	objects[v] = [
-	// 	...ispy.scenes["3D"].getObjectByName('Physics').children,
-	// 	...ispy.scenes["3D"].getObjectByName('Tracking').children
-	// ].reduce((dic, o) => {
-	// 	dic[o.name.replace(/_V\d/g, '')] = o;
-	// 	return dic;
-	// }, {});
-	// });
-	// return objects;
-	return [
-			...ispy.scenes["3D"].getObjectByName('Physics').children,
-			...ispy.scenes["3D"].getObjectByName('Tracking').children
-		].reduce((dic, o) => {
-			dic[o.name.replace(/_V\d/g, '')] = o.name;
-			return dic;
-		}, {});
-}

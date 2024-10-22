@@ -8,6 +8,16 @@ analysis.checkCurrentSelection = function() {
     );
 }
 
+analysis.getSceneObjects = function() {
+	return [
+			...ispy.scenes["3D"].getObjectByName('Physics').children.map(o => o.name),
+			...ispy.scenes["3D"].getObjectByName('Tracking').children.map(o => o.name)
+		].reduce((dic, o) => {
+			dic[o.replace(/^(?:PAT|PF)?(.*?)_V\d$/, '$1')] = o;
+			return dic;
+		}, {});
+}
+
 analysis.getSelectionResults = function() {
     if (analysis.file_events_summary == undefined) {
         document.getElementById('event-statistics').innerHTML = "No event file is loaded!";
@@ -19,14 +29,14 @@ analysis.getSelectionResults = function() {
     var m_hist = createHistogramData(masses.m.values().toArray(), 0, 200, 20);
     var mt_hist = createHistogramData(masses.mt.values().toArray(), 0, 200, 20);
     Plotly.newPlot("m-hist", [m_hist]);
-    Plotly.newPlot("mt-hist", [mt_hist]);
+    // Plotly.newPlot("mt-hist", [mt_hist]); // TODO enable this when transverse mass is implemented
     return;
 }
 
 analysis.getSelectionCuts = function() {
     var cuts = {};
     ispy.subfoldersReduced["Selection"].forEach(e => {
-        if (typeof(e.getValue()) == "function") return;
+        if (["function", "string"].includes(typeof(e.getValue()))) return;
         cuts[e.property] = e.getValue();
     });
     return cuts
@@ -48,11 +58,13 @@ analysis.getPassingEvents = function() {
 }
 
 // Get CSV of the passing events
-analysis.createCSV = function() {
+analysis.createCSV = function() { // TODO: enable transverse mass
     var masses = getMassesArray();
-    var csv = "data:text/csv;charset=utf-8,Event Index,Invariant Mass,Transverse Mass\r\n";
+    //     var csv = "data:text/csv;charset=utf-8,Event Index,Invariant Mass,Transverse Mass\r\n";
+    var csv = "data:text/csv;charset=utf-8,Event Index,Invariant Mass\r\n";
     masses.m.forEach((m, index) => {
-        csv += index + "," + m + "," + masses.mt.get(index) + "\r\n";
+        // csv += index + "," + m + "," + masses.mt.get(index) + "\r\n";
+        csv += index + "," + m + "\r\n";
     });
     var encodedUri = encodeURI(csv);
     window.open(encodedUri);
@@ -73,10 +85,14 @@ analysis.buildFileSummary = function() {
 	
     // get the event data
     ispy.event_list.forEach((event_path, event_index) => {
+        try {
         event = JSON.parse(ispy.cleanupData(ispy.ig_data.file(event_path).asText()));
         event_summary.set(event_index.toString(), getEventsSummary(event));
+    } catch(err) {
+        alert("Error encountered parsing event " + (event_index + 1) + ": " + err);
+        alert("The event will be skipped in the analysis.");
     }
-    )
+    });
 
     // store the event summary as a global variable
     analysis.file_events_summary = event_summary;
@@ -101,14 +117,14 @@ analysis.buildFileSummary = function() {
 };
 
 function getEventsSummary(event_json) {
-    let part_names = ["TrackerMuons", "GsfElectrons", "Photons", "PFMETs"];
+    let part_names = ["TrackerMuons", "GsfElectrons", "Photons", "METs"];
     let keys = Object.keys(event_json.Collections)
     var map = part_names.map(name => keys.filter(k => k.includes(name)).reduce((x, y) => x > y ? x: y));
     var summary = new Map();
     map.forEach((collec) => {
 
         let type = event_json.Types[collec];
-        let key = collec.replace(/_V\d/g, '');
+        let key = collec.replace(/^(?:PAT|PF)?(.*?)_V\d$/, '$1');
         if (collec.includes("MET")) {
             summary.set(key, ispy.getMetInformation(type, event_json.Collections[collec][0]));
             return;
@@ -137,7 +153,7 @@ function getSelectionParticles(event_index) {
         return true;
     });
     selection.forEach(key => {
-        if (key == "PFMETs") {
+        if (key == "METs") {
             results["met"] = summary.get(key);
             return;
         }
@@ -162,7 +178,7 @@ function checkIfEventPassing(event_index=-1) {
     var particles = analysis.file_events_summary.get(String(event_index));
 
     for (let [name, part] of particles) {
-        if (name == "PFMETs") {
+        if (name == "METs") {
             pass &&= checkMET(part, cuts[name]);
             break;
         }
@@ -220,7 +236,7 @@ function sumFourVectors(particles) {
 
 
 // Calculate the invariant mass of a list of particles
-function getInvariantMass(sumVector) { // TODO
+function getInvariantMass(sumVector) {
 
     let m = 0;
     let sumPx, sumPy, sumPz, sumE;
