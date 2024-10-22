@@ -41,7 +41,7 @@ In der 3D Ansicht lässt sich das Event auch entlang einer Achse anzeigen. Dazu 
 
 Unter dem Reiter "Detector" in der Kontrollleiste auf der rechten Seite, können die verschiedenen Detektorelemente (in abstrahierter Form) ein- und ausblenden werden. Die Detektorelemente sind in verschiedene Gruppen unterteilt, die über die Dropdown-Liste auswählen werden können. Dafür muss die Checkbox "show" unter der jeweiligen Gruppe aktiviert werden.
 
-Eine "reele" Ansicht der CMS Detektorteile kann aber auch angezeigt werden. Dafür muss das Modell des jeweiligen Teils über den Knopf "Import 3D Model" <i class="fa fa-download" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> und danach "import file(s) from the Web" importiert werden. Zu Bachten ist jedoch, dass die 3D Modelle in einigen Fällen sehr groß sein können und die Darstellung des Events verlangsamen können.
+Eine "reelle" Ansicht der CMS Detektorteile kann aber auch angezeigt werden. Dafür muss das Modell des jeweiligen Teils über den Knopf "Import 3D Model" <i class="fa fa-download" style="border: 1px solid black; padding: 6px; display: inline-block;"></i> und danach "import file(s) from the Web" importiert werden. Zu Bachten ist jedoch, dass die 3D Modelle in einigen Fällen sehr groß sein können und die Darstellung des Events verlangsamen können.
 Durch neuladen der Seite, können alle importierten Modelle wieder entfernt werden.
 
 ### Eventobjecte ein- und ausblenden
