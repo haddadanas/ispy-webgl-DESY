@@ -153,8 +153,8 @@ function getSelectionParticles(event_index) {
         return true;
     });
     selection.forEach(key => {
-        if (key == "METs") {
-            results["met"] = summary.get(key);
+        if (key == "minMETs" || key == "maxMETs") {
+            results["met"] = summary.get("METs");
             return;
         }
         if (summary.has(key)) {
@@ -179,8 +179,9 @@ function checkIfEventPassing(event_index=-1) {
 
     for (let [name, part] of particles) {
         if (name == "METs") {
-            pass &&= checkMET(part, cuts[name]);
-            break;
+            pass &&= checkMinMET(part, cuts["minMETs"]);
+            pass &&= checkMaxMET(part, cuts["maxMETs"]);
+            if (!pass) break;
         }
         if (cuts[name] == -1) continue;
         if (name == "TrackerMuons" || name == "GsfElectrons") {
@@ -197,8 +198,14 @@ function checkIfEventPassing(event_index=-1) {
 }
 
 // Helper functions to check the selection
-function checkMET(met, cut) {
+function checkMinMET(met, cut) {
+    if (cut == -1) return true;
     return met["pt"] >= cut;
+}
+
+function checkMaxMET(met, cut) {
+    if (cut == -1) return true;
+    return met["pt"] <= cut;
 }
 
 function checkCharge(leptons, cut) {
