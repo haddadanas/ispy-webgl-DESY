@@ -147,6 +147,7 @@ function getSelectionParticles(event_index) {
     var parts = new Map();
     let summary = analysis.file_events_summary.get(String(event_index));
     selection = analysis.getSelectionCuts();
+    let pt_cut = selection["pt"];
     selection = Object.keys(selection).filter(sel => {
         if (["charge", "pt"].includes(sel)) return false;
         if (selection[sel] == 0 || selection[sel] == -1) return false;
@@ -158,7 +159,11 @@ function getSelectionParticles(event_index) {
             return;
         }
         if (summary.has(key)) {
-            parts.set(key, summary.get(key));
+            tmp = summary.get(key);
+            if (key == "GsfElectrons" || key == "TrackerMuons") {
+                tmp = tmp.filter(part => part["pt"] >= pt_cut);
+            }
+            parts.set(key, tmp);
         }
     });
     results["parts"] = parts;
