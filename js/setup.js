@@ -645,13 +645,18 @@ ispy.initSelectionFields = function() {
 
         // add the controller to the folder
         if (key == "charge") {
-            var cont = folder.add(row_obj, key, ["", "same", "opposite"]).name(elem_name);
+            var cont = folder.add(row_obj, key, ["", "positive", "negative", "opposite"]).name(elem_name);
             cont.getValue = function() {
-                result = this.object[this.property];
-                if (result == "opposite") return 0;
-                if (result == "same") return 1;
-                return -1;
+                let result = this.object[this.property];
+                let mapping = {
+                    "negative": -1,
+                    "positive": 1,
+                    "opposite": 0,
+                    "": ""
+                };
+                return mapping[result];
             }
+            cont.domElement.style.color = "blue";
             return;
         }
 

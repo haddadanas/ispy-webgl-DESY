@@ -202,13 +202,12 @@ function checkMET(met, cut) {
 }
 
 function checkCharge(leptons, cut) {
-    if (cut == -1) return true;
+    if (cut == undefined) return true;
     let chargeSum = 0;
     leptons.forEach(lepton => {
         chargeSum += lepton["charge"];
     });
-    chargeSum = Math.min(1, Math.abs(chargeSum));
-    return chargeSum == cut;
+    return Math.sign(chargeSum) == cut;
 }
 
 function getPtPassingLeptons(leptons, cut) {
